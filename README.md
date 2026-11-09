@@ -16,7 +16,9 @@ Tres fases de arcade vertical, scroll por bloques, sprites enmascarados, gráfic
 
 ## Descargar y jugar
 
-**[GRIT CLAYMORE V1.0.1 para ZX Spectrum 48K (.TAP)](juego/GRIT_CLAYMORE_V1.0.1_48K.tap)**
+**[Descargar la Release oficial V1.0.1 (juego, manual, atlas y carátula)](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1)**
+
+También puedes obtener [solo el TAP V1.0.1](juego/GRIT_CLAYMORE_V1.0.1_48K.tap). La [Release V1.0 original](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conserva sin cambios.
 
 Carga el archivo en **Fuse** seleccionando la máquina **Spectrum 48K**. El juego utiliza el sonido beeper y teclado.
 
@@ -51,13 +53,17 @@ Las capturas jugables de la documentación se han generado a partir de la RAM de
 El proyecto incluye el ensamblador Z80, mapas, generadores de gráficos y herramientas de pruebas.
 
 ```bash
-python3 -m pip install -r requirements.txt
-python3 build_all.py
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python build_all.py
 ```
 
-El banco genera `build/GRIT_CLAYMORE_V1.0.1_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
+El banco genera `build/GRIT_CLAYMORE_V1.0.1_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. La [verificación automática de GitHub Actions](.github/workflows/verificar-grit.yml) comprueba que el TAP reconstruido sea **idéntico byte por byte** al publicado y no modifica las Releases. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
 
 La V1.0.1 conserva la jugabilidad aprobada en V1.0, incluido el centrado exacto de los tres iconos de vidas. **La compilación está verificada mediante pruebas automatizadas; no hay certificación de esta última revisión en Fuse real.**
+
+El archivo [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) documenta las huellas del **paquete de publicación V1.0.1**, no pretende ser un inventario actualizado de cambios posteriores en textos de mantenimiento.
 
 ## Licencias y derechos
 
