@@ -1,29 +1,20 @@
-# Publicar todos los archivos en GitHub
+# Actualizar GRIT CLAYMORE de V1.0 a V1.0.1 en GitHub
 
-El repositorio remoto existe en <https://github.com/OnRail76/Grit-Claymore>.
+La Release original **v1.0 permanece intacta**. Esta actualización contiene el TAP con los controles visibles en la pantalla del título, su captura auténtica y el cambio del generador de gráficos.
 
-Como los conectores de publicación de esta sesión solo permiten escribir ficheros de texto, el TAP, los dos PDF, la carátula y los recursos necesitan un envío desde un equipo autenticado en GitHub. **Este paquete ya está completamente preparado.**
+## Publicar desde Bazzite (KDE)
 
-## Linux
-
-1. Descomprime `GRIT_CLAYMORE_GITHUB_V1.0_LIMPIO.zip`.
-2. Abre una terminal dentro de la carpeta `Grit-Claymore_GitHub_LISTO`.
-3. Ejecuta:
+1. Descargar y extraer el ZIP completo V1.0.1.
+2. Entrar en `Grit-Claymore_GitHub_LISTO` en Dolphin y pulsar **F4**.
+3. Comprobar que GitHub CLI está conectado como `OnRail76` (`gh auth status`).
+4. Ejecutar:
 
 ```bash
 bash PUBLICAR_EN_GITHUB.sh
 ```
 
-El script clona el repositorio, copia los archivos correctos, realiza el commit y ejecuta `git push origin main` sin forzar ni borrar el historial. Requiere una sesión GitHub autenticada (`gh auth login`, por ejemplo) y una identidad de Git configurada. No solicita contraseñas ni tokens dentro del script.
+El script clona `OnRail76/Grit-Claymore`, retira el TAP V1.0 solo de la rama principal, copia la V1.0.1 y sus fuentes, realiza commit y push, y crea la Release **v1.0.1** con TAP y materiales oficiales.
 
-El script **no compila** ni altera el TAP: publica exactamente el archivo corregido y comprobado. Los fuentes se pueden reconstruir ejecutando `python3 build_all.py` (Pillow + NumPy).
+**Sin trucos:** no utiliza `--force`, no borra tags ni Releases anteriores y no abre el paginador `less` (usa `GIT_PAGER=cat`). Para ejecutarlo requiere `git` y `gh` autenticado. Si aparece un error, se detendrá sin afirmar que ha terminado.
 
-### Comprobación
-
-Archivo: `juego/GRIT_CLAYMORE_V1.0_48K.tap`
-
-SHA-256: `2cc7b6e59ecf1acef6763edf47b4dafe09367339ad796bdf521108b2e1d24dbd`
-
-```
-sha256sum juego/GRIT_CLAYMORE_V1.0_48K.tap
-```
+**Comprobación:** [Release v1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1) (el enlace aparecerá cuando se publique).

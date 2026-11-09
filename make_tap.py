@@ -20,7 +20,7 @@ bas=(line(10,b'\xfd \xb0 "32767"')+
      line(30,b'\xf9 \xc0 \xb0 "32768"'))
 code=BIN.read_bytes()
 assert 0x8000+len(code)<0xffe0 and 0x7ff0-0x7b00>1024
-header_bas=bytes([0])+b'GRIT V078 '+struct.pack('<HHH',len(bas),10,len(bas))
+header_bas=bytes([0])+b'GRIT V101 '+struct.pack('<HHH',len(bas),10,len(bas))
 header_bin=bytes([3])+b'GRIT Z80  '+struct.pack('<HHH',len(code),0x8000,0x8000)
 raw=block(0,header_bas)+block(255,bas)+block(0,header_bin)+block(255,code)
 OUT.write_bytes(raw)

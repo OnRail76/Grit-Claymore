@@ -1,4 +1,17 @@
-# GRIT CLAYMORE · V1.0 corregida
+# GRIT CLAYMORE · Registro de cambios
+
+## V1.0.1 — Controles en la pantalla de título (9 de noviembre de 2026)
+
+- Instrucciones **Q/A/O/P MOVER  SPACE FUEGO  PULSA SPACE**, con fuente nativa de 5×7 píxeles, centradas en la última franja negra (Y=184–190) de la pantalla de 256×192.
+- Primera ilustración y créditos protegidos: las 184 líneas anteriores y las primeras 23 filas de atributos son **idénticas byte a byte** a V1.0; comprobado por SHA-256.
+- Pantalla `.SCR` regenerada desde el generador original y comprimida como datos RLE del Z80: no es una imagen falsificada ni una rutina de superposición durante el juego.
+- Prueba nueva `tests/test_v101_title.py`: comprueba pantalla, descompresión Z80, arranque con SPACE y preservación de la V1.0.
+- No se han alterado los controles, jugabilidad, HUD, fases, carátula ni los PDF de V1.0. La etiqueta y Release V1.0 continúan como versión histórica.
+- Archivo TAP v1.0.1 SHA-256: `a233e7a176bbad3aa49e26579b8c965da45f9cc1152a6144a9230b1df3d27de3`.
+
+---
+
+## V1.0 — Edición corregida
 
 Se conserva el juego aprobado. Esta edición aplica exclusivamente una corrección geométrica al campo VIDAS y arreglos de maquetación a la documentación y la carátula.
 

@@ -31,6 +31,42 @@ for cy in range(24):
   _,ink,mask=min(opts,key=lambda item:item[0])
   bitmap[cy*8:cy*8+8,cx*8:cx*8+8]=mask
   attrs[cy,cx]=0x40+ink
+# V1.0.1 — Instrucciones en la última fila negra de la pantalla.
+# Preservamos íntegramente las 184 primeras líneas de la ilustración aprobada;
+# los siete píxeles de alto del texto ocupan únicamente Y=184..190.
+# Fuente de 5x7: cada glifo son cinco bits por fila y una columna de separación.
+TITLE_CONTROLS = "Q/A/O/P MOVER  SPACE FUEGO  PULSA SPACE"
+FONT_5X7 = {
+ 'A': ("01110", "10001", "10001", "11111", "10001", "10001", "10001"),
+ 'C': ("01110", "10001", "10000", "10000", "10000", "10001", "01110"),
+ 'E': ("11111", "10000", "10000", "11110", "10000", "10000", "11111"),
+ 'F': ("11111", "10000", "10000", "11110", "10000", "10000", "10000"),
+ 'G': ("01110", "10001", "10000", "10111", "10001", "10001", "01111"),
+ 'L': ("10000", "10000", "10000", "10000", "10000", "10000", "11111"),
+ 'M': ("10001", "11011", "10101", "10101", "10001", "10001", "10001"),
+ 'O': ("01110", "10001", "10001", "10001", "10001", "10001", "01110"),
+ 'P': ("11110", "10001", "10001", "11110", "10000", "10000", "10000"),
+ 'Q': ("01110", "10001", "10001", "10001", "10101", "10010", "01101"),
+ 'R': ("11110", "10001", "10001", "11110", "10100", "10010", "10001"),
+ 'S': ("01111", "10000", "10000", "01110", "00001", "00001", "11110"),
+ 'U': ("10001", "10001", "10001", "10001", "10001", "10001", "01110"),
+ 'V': ("10001", "10001", "10001", "10001", "10001", "01010", "00100"),
+ '/': ("00001", "00001", "00010", "00100", "01000", "10000", "10000"),
+ ' ': ("00000",)*7,
+}
+assert set(TITLE_CONTROLS) <= set(FONT_5X7), 'Faltan caracteres en la fuente'
+assert not np.any(bitmap[184:192,:]), 'Franja inferior ocupada: no invadir ilustración'
+width = 6*len(TITLE_CONTROLS)-1
+assert width <= 240, f'La línea no cabe en la franja: {width} píxeles'
+x0 = (256-width)//2
+for i,c in enumerate(TITLE_CONTROLS):
+ for dy, row in enumerate(FONT_5X7[c]):
+  for dx, bit in enumerate(row):
+   if bit == '1':
+    bitmap[184+dy, x0+6*i+dx] = 1
+# 24ª fila de atributos: blanco BRIGHT sobre negro, sin afectar filas anteriores.
+attrs[23,:] = 0x47
+assert not np.any(bitmap[191,:]), 'La línea debe dejar margen inferior de un píxel'
 # Distribución entrelazada real de la VRAM 0x4000..0x57FF.
 output=bytearray(6912)
 for y in range(192):
@@ -80,4 +116,4 @@ for name in ('TITULO_Z80_V07.png','TITULO_Z80_V072.png'):
 lines=['title_rle:']
 for q in range(0,len(enc),24):lines.append(' db '+','.join(str(v) for v in enc[q:q+24]))
 (R/'src/title_generated.asm').write_text('\n'.join(lines)+'\n')
-print(f'TITULO V072: 6912 bytes .SCR, {len(enc)} bytes RLE, colores legal 8x8, verificado sin pérdida')
+print(f'TITULO V1.0.1: 6912 bytes .SCR, {len(enc)} bytes RLE, controles en Y=184..190, imagen original intacta')

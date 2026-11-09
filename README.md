@@ -2,7 +2,7 @@
 
 **Un pequeño arcade de disparos para 48K de Spectrum.**
 
-**ZX Spectrum 48K · Código máquina Z80 · Tony C. Ware · 2026 · V1.0**
+**ZX Spectrum 48K · Código máquina Z80 · Tony C. Ware · 2026 · V1.0.1**
 
 ![Carátula oficial](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png)
 
@@ -16,7 +16,7 @@ Tres fases de arcade vertical, scroll por bloques, sprites enmascarados, gráfic
 
 ## Descargar y jugar
 
-**[GRIT CLAYMORE V1.0 para ZX Spectrum 48K (.TAP)](juego/GRIT_CLAYMORE_V1.0_48K.tap)**
+**[GRIT CLAYMORE V1.0.1 para ZX Spectrum 48K (.TAP)](juego/GRIT_CLAYMORE_V1.0.1_48K.tap)**
 
 Carga el archivo en **Fuse** seleccionando la máquina **Spectrum 48K**. El juego utiliza el sonido beeper y teclado.
 
@@ -29,6 +29,12 @@ Carga el archivo en **Fuse** seleccionando la máquina **Spectrum 48K**. El jueg
 | ESPACIO | Disparo / empezar |
 
 Grit se mueve y dispara en ocho direcciones; el tanque se mueve y dispara en cuatro. Las raciones recuperan energía. Los proyectiles del tanque atraviesan obstáculos y el vehículo arrolla a soldados. La fase 3 se juega a pie, contra mechas y el Hind del Comisario.
+
+### Pantalla de título actualizada (V1.0.1)
+
+![Pantalla de título ZX Spectrum con controles visibles](recursos/juego/TITULO.png)
+
+La pantalla de título muestra **Q/A/O/P MOVER · SPACE FUEGO · PULSA SPACE** en la última fila negra, sin modificar la ilustración, los créditos ni la rutina de inicio. El resto del juego permanece como en V1.0. La Release V1.0 se conserva en el historial.
 
 ## Documentación ilustrada
 
@@ -49,9 +55,9 @@ python3 -m pip install -r requirements.txt
 python3 build_all.py
 ```
 
-Se genera `build/GRIT_CLAYMORE_V078_48K.tap` y se ejecuta el conjunto de pruebas. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
+El banco genera `build/GRIT_CLAYMORE_V1.0.1_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
 
-La V1.0 corregida conserva la jugabilidad aprobada y centra mejor los tres iconos de vidas. **La compilación está verificada mediante pruebas automatizadas; no hay certificación de esta última revisión en Fuse real.**
+La V1.0.1 conserva la jugabilidad aprobada en V1.0, incluido el centrado exacto de los tres iconos de vidas. **La compilación está verificada mediante pruebas automatizadas; no hay certificación de esta última revisión en Fuse real.**
 
 ## Licencias y derechos
 

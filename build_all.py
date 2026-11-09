@@ -22,9 +22,14 @@ for step in (
  ['tests/test_v077.py'],
  ['tests/test_v078.py'],
  ['tests/test_v1_hud_centered.py'],
+ ['tests/test_v101_title.py'],
  ['tools/export_review.py'],
  ['tools/review_v07.py'],
  ['tools/preview_v076.py'],
  ['tools/demo_animation_v074.py']):
  print('+', ' '.join(step),flush=True)
  subprocess.run([sys.executable,*step],cwd=R,check=True)
+
+from shutil import copyfile
+copyfile(R/'build/GRIT_CLAYMORE_V078_48K.tap',R/'build/GRIT_CLAYMORE_V1.0.1_48K.tap')
+print('GRIT CLAYMORE V1.0.1 listo en build/GRIT_CLAYMORE_V1.0.1_48K.tap')
