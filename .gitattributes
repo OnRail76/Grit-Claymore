@@ -1,0 +1,10 @@
+# Git: los recursos de ZX Spectrum y arte final no son archivos de texto.
+*.tap binary
+*.bin binary
+*.scr binary
+*.spr binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.zip binary
