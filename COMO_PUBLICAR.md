@@ -1,19 +1,29 @@
-# Publicar el paquete completo
+# Publicar todos los archivos en GitHub
 
-El repositorio está preparado para recibir la edición corregida V1.0.
+El repositorio remoto existe en <https://github.com/OnRail76/Grit-Claymore>.
 
-Los archivos fuente, el TAP, PDF, carátula y recursos están ordenados en el paquete **GRIT_CLAYMORE_GITHUB_V1.0_LIMPIO.zip** entregado en la conversación de ChatGPT que acompaña esta publicación.
+Como los conectores de publicación de esta sesión solo permiten escribir ficheros de texto, el TAP, los dos PDF, la carátula y los recursos necesitan un envío desde un equipo autenticado en GitHub. **Este paquete ya está completamente preparado.**
 
-**Desde un equipo Linux con Git autenticado:**
+## Linux
 
-1. Descargar y descomprimir el ZIP.
-2. Abrir la carpeta `Grit-Claymore_GitHub_LISTO`.
-3. Ejecutar `bash PUBLICAR_EN_GITHUB.sh`.
+1. Descomprime `GRIT_CLAYMORE_GITHUB_V1.0_LIMPIO.zip`.
+2. Abre una terminal dentro de la carpeta `Grit-Claymore_GitHub_LISTO`.
+3. Ejecuta:
 
-El script clona este repositorio, incorpora todo el material, crea un commit y lo sube a `main`. No fuerza el historial remoto y no altera el TAP.
+```bash
+bash PUBLICAR_EN_GITHUB.sh
+```
 
-El TAP corregido y recompilado comparten SHA-256:
+El script clona el repositorio, copia los archivos correctos, realiza el commit y ejecuta `git push origin main` sin forzar ni borrar el historial. Requiere una sesión GitHub autenticada (`gh auth login`, por ejemplo) y una identidad de Git configurada. No solicita contraseñas ni tokens dentro del script.
 
-`2cc7b6e59ecf1acef6763edf47b4dafe09367339ad796bdf521108b2e1d24dbd`
+El script **no compila** ni altera el TAP: publica exactamente el archivo corregido y comprobado. Los fuentes se pueden reconstruir ejecutando `python3 build_all.py` (Pillow + NumPy).
 
-**Aclaración:** esta conexión GitHub permite escritura de archivos de texto, pero no transmisión de los archivos binarios locales. El ZIP debe enviarse desde un equipo con acceso a los archivos y autenticación GitHub.
+### Comprobación
+
+Archivo: `juego/GRIT_CLAYMORE_V1.0_48K.tap`
+
+SHA-256: `2cc7b6e59ecf1acef6763edf47b4dafe09367339ad796bdf521108b2e1d24dbd`
+
+```
+sha256sum juego/GRIT_CLAYMORE_V1.0_48K.tap
+```

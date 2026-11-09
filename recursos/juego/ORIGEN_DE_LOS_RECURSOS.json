@@ -1,0 +1,22 @@
+{
+  "source_zip": "GRIT_CLAYMORE_V1.0_HUD_CORREGIDO.zip",
+  "tap_sha256": "2cc7b6e59ecf1acef6763edf47b4dafe09367339ad796bdf521108b2e1d24dbd",
+  "bin_sha256": "408f6a4750565879f01d33183a00bfdd49bbaa77eb38aeb75956bf3836c228bc",
+  "capture_method": "memoria ZX Spectrum de 6912 bytes de interprete Z80 parcial incluido en fuentes v1.0 HUD corregido; NO Fuse",
+  "render_method": "decodificador bitmap ZX Spectrum + atributos 8x8, ampliación NEAREST",
+  "sprite_source": "bytes de glyphs y glyph_colors en binario Z80 compilado v1.0 HUD corregido, verificados con binarios de recursos incluidos",
+  "direct_gameplay_captures": [
+    "FASE_1_SECTOR_1.scr",
+    "FASE_1_SECTOR_2.scr",
+    "FASE_1_SECTOR_3.scr",
+    "FASE_1_SECTOR_4.scr",
+    "FASE_2_SECTOR_1.scr",
+    "FASE_2_SECTOR_2.scr",
+    "FASE_2_SECTOR_3.scr",
+    "FASE_2_SECTOR_4.scr",
+    "FASE_3_SECTOR_1.scr",
+    "FASE_3_SECTOR_2.scr",
+    "FASE_3_SECTOR_3.scr",
+    "FASE_3_SECTOR_4.scr"
+  ]
+}
