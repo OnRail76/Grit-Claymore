@@ -1,4 +1,4 @@
-# Artefactos generados / caches
+# Compilación y archivos generados
 build/
 __pycache__/
 *.pyc
@@ -6,3 +6,19 @@ __pycache__/
 .venv/
 .DS_Store
 *.log
+
+# Ensamblador generado automáticamente
+src/grit.asm
+src/*_generated.asm
+
+# Gráficos derivados por los scripts (se regeneran con build_all.py)
+assets/binarios_Z80/
+assets/*.scr
+assets/*.bin
+assets/*.gif
+assets/*.json
+assets/*.png
+!assets/TITULO_ILUSTRACION_APROBADA.png
+!assets/VICTORIA_APROBADA_V078.png
+assets/*.jpg
+!assets/CALAVERA_REFERENCIA_USUARIO.jpg
