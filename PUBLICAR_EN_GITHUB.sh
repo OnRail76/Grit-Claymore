@@ -17,6 +17,15 @@ done
   exit 1
 }
 gh auth status >/dev/null
+
+# Protección: este script pertenece exclusivamente al lanzamiento V1.0.1.
+# No copiar fuentes antiguas sobre futuras versiones si ya fue publicada.
+if gh release view v1.0.1 --repo "$REPO" >/dev/null 2>&1; then
+  echo 'La Release v1.0.1 ya está publicada. No se modifica main ni se reemplazan archivos.'
+  echo 'Para versiones futuras, crea un script nuevo que use su etiqueta correspondiente.'
+  exit 0
+fi
+
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 printf '\nClonando %s ...\n' "$REMOTE"
