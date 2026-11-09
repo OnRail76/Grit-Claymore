@@ -1,4 +1,10 @@
-# Actualizar GRIT CLAYMORE de V1.0 a V1.0.1 en GitHub
+# Publicación histórica de GRIT CLAYMORE V1.0.1
+
+**Estado: publicada y cerrada.** [Descargar la Release V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1).
+
+**No es necesario volver a ejecutar el script de publicación.** El script `PUBLICAR_EN_GITHUB.sh` es específico de V1.0.1 y, desde esta revisión, no modifica el repositorio si esa Release ya existe. Para próximas versiones será necesario crear un nuevo procedimiento específico, sin reutilizar paquetes antiguos.
+
+## Procedimiento utilizado originalmente
 
 La Release original **v1.0 permanece intacta**. Esta actualización contiene el TAP con los controles visibles en la pantalla del título, su captura auténtica y el cambio del generador de gráficos.
 
