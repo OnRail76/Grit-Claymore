@@ -1,0 +1,49 @@
+# CI de solo lectura. La publicación de Releases se realiza manualmente.
+name: Verificar GRIT CLAYMORE V1.0.1
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/verificar-grit.yml'
+      - 'src/**'
+      - 'tools/**'
+      - 'tests/**'
+      - 'assets/**'
+      - 'build_all.py'
+      - 'build_asm.py'
+      - 'make_tap.py'
+      - 'requirements.txt'
+      - 'juego/**'
+  pull_request:
+    paths:
+      - '.github/workflows/verificar-grit.yml'
+      - 'src/**'
+      - 'tools/**'
+      - 'tests/**'
+      - 'assets/**'
+      - 'build_all.py'
+      - 'build_asm.py'
+      - 'make_tap.py'
+      - 'requirements.txt'
+      - 'juego/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compilar-y-verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar fuentes
+        uses: actions/checkout@v4
+      - name: Instalar dependencias Python
+        run: python3 -m pip install -r requirements.txt
+      - name: Compilar TAP y ejecutar regresiones Z80
+        run: python3 build_all.py
+      - name: Verificar identidad exacta con V1.0.1 publicada
+        run: |
+          set -euo pipefail
+          echo "a233e7a176bbad3aa49e26579b8c965da45f9cc1152a6144a9230b1df3d27de3  juego/GRIT_CLAYMORE_V1.0.1_48K.tap" | sha256sum -c -
+          echo "a233e7a176bbad3aa49e26579b8c965da45f9cc1152a6144a9230b1df3d27de3  build/GRIT_CLAYMORE_V1.0.1_48K.tap" | sha256sum -c -
