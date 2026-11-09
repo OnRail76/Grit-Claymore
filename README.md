@@ -70,3 +70,7 @@ El archivo [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) documenta las huella
 El **código fuente y las herramientas** se publican con licencia **MIT**, © 2026 Tony C. Ware. Los **gráficos, sprites, carátula, ilustraciones, logotipo y materiales gráficos** tienen los derechos reservados. El archivo compilado se ofrece para descarga y uso personal. Lee [LICENSE](LICENSE), [LICENCIA_GRAFICOS.md](LICENCIA_GRAFICOS.md) y [DERECHOS.md](DERECHOS.md).
 
 **© 2026 Tony C. Ware.**
+
+## Carátulas alternativas
+
+Además de la portada oficial, hay una [galería de tres carátulas alternativas con el logo Tony C. Ware](caratula/alternativas/README.md). Son ilustraciones promocionales; no son capturas del juego y mantienen sus derechos reservados.
