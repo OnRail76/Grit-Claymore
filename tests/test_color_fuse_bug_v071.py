@@ -7,12 +7,12 @@ from harness import boot,invoke,tick
 from mini_z80 import SYM
 
 def assert_colors(v,phase,sector):
-    front=bytes(v.m[0x5800:0x5b00]);shadow=bytes(v.m[0x7800:0x7b00])
+    front=bytes(v.m[0x5800:0x5b00]);shadow=v.shadow()[6144:]
     assert front == shadow, f'front/shadow attributes diverge phase {phase} sector {sector}'
     colors=set(front)
     assert colors.difference({0,1}), f'FATAL blue-on-black V07 regression phase {phase} sector {sector}'
-    assert 0x45 in colors and 0x46 in colors, f'HUD cyan/yellow lost: {sorted(colors)}'
-    assert front[24]==0x46, f'HUD first cell should be bright yellow, got {front[24]:02x}'
+    assert 0x68 in colors and 0x46 in colors, f'HUD cyan/yellow lost: {sorted(colors)}'  # V1.2: franja cian de VIDAS (PAPER) y calaveras
+    assert front[32+25]==0x46, f'HUD skull cell should be bright yellow, got {front[32+25]:02x}'  # V1.2: celda 24 = bisel gris
     print(f'PASS colors phase={phase} sector={sector}: {dict(Counter(front))}')
 
 def main():

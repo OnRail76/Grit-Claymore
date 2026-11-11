@@ -3,7 +3,7 @@
 from harness import boot,invoke
 from mini_z80 import SYM,VM,ROOT
 
-v=VM();v.sp=0x7ff0;v.pc=SYM['win_screen'];
+v=VM();v.sp=0;v.pc=SYM['win_screen'];
 for _ in range(300000):
  if v.pc==SYM['sr_wait']:break
  v.step()
@@ -37,37 +37,57 @@ assert v.val('ration_available')==1
 assert v.val('mecha_remaining')==3
 print('PASS phase 3 forbids tanks and offers a ration')
 
-# Visual regression: check a mecha moving leaves NO image pixels behind.
+# Visual regression: a destroyed mecha leaves NO image pixels behind.
+# V1.1: los mechas ya no se borran en erase_dynamic (se repintan enteros cada
+# tick desde el tile de fondo); el suelo se restaura al morir o al moverse.
 v=boot();v.set('phase',3);v.set('sector',1);invoke(v,'scene_init')
 en=SYM['enemies'];x=v.m[en+1];y=v.m[en+2]
 assert 1<=x<=19 and 1<=y<=19
 v.set('frame',0)
 invoke(v,'erase_dynamic')
-# Restoring background must exactly match a world without actors at their old positions.
-# Snapshot a 3x3 region as tile-level shadow bytes and attrs; compare to background draw.
+v.m[en+6]=1                                   # un impacto para destruirlo
+v.set('bullet_on',1);v.set('bullet_x',x+1);v.set('bullet_y',y+3);v.set('bullet_dir',0);v.set('bullet_power',0)
+invoke(v,'update_player_bullet')
+assert v.m[en]==0 and v.val('fx_ttl')>0
 for yy in range(3):
  for xx in range(3):
   d=y+yy;e=x+xx
-  # Compute static background tile by reading map_data and corresponding compiled glyph.
   tile=v.m[SYM['map_data']+d*32+e]
   src=SYM['glyphs']+8*tile
   for py in range(8):
    scan=(d*8+py)
    zoff=((scan&192)<<5)+((scan&7)<<8)+((scan&56)<<2)+e
-   assert v.m[0x6000+zoff]==v.m[src+py],('mecha residue',d,e,py)
-print('PASS first mecha restores its 24x24 background completely')
+   assert v.m[0xe000+zoff]==v.m[src+py],('mecha residue',d,e,py)
+print('PASS destroyed mecha restores its 24x24 background completely')
 print('ALL V077 REGRESSIONS PASSED (partial VM, not Fuse)')
 
 # Regression of the exact complaint: a 24x24 mech must never leave fragments
-# behind after movement / restoration. Compare entire active shadow bitmap to
-# terrain-only frame after every erase. No scrolling or animated tiles here.
+# behind after movement. Fuera de las cajas 3x3 de los mechas vivos, la sombra
+# debe ser exactamente el terreno. No scrolling or animated tiles here.
+def cell(buf,d,e):
+ return bytes(buf[((d&24)<<8)+py*256+((d&7)<<5)+e] for py in range(8))
+ref=boot();ref.set('phase',3);ref.set('sector',1);invoke(ref,'scene_init')
+for k in range(3):ref.m[en+12*k]=0
+invoke(ref,'generate_map');terrain=ref.shadow()
 v=boot();v.set('phase',3);v.set('sector',1);invoke(v,'scene_init')
-invoke(v,'erase_dynamic')
-terrain=bytes(v.m[0x6000:0x7800])
+moved=set()
 for i in range(28):
- assert bytes(v.m[0x6000:0x7800])==terrain,('stale mecha trail after erase',i)
  v.set('frame',i*4)
+ invoke(v,'erase_dynamic')
  invoke(v,'update_mechas')
  invoke(v,'draw_dynamic')
  invoke(v,'erase_dynamic')
+ boxes=set()
+ for k in range(3):
+  b=en+12*k
+  if v.m[b]:
+   moved.add((k,v.m[b+1]))
+   boxes|={(v.m[b+2]+yy,v.m[b+1]+xx) for yy in range(3) for xx in range(3)}
+ sh=v.shadow()
+ for d in range(24):
+  for e in range(24):
+   if (d,e) not in boxes:
+    assert cell(sh,d,e)==cell(terrain,d,e),('stale mecha trail',i,d,e)
+ v.set('health',4);v.set('invuln',0)
+assert len(moved)>6,'los mechas no se han movido en la prueba'
 print('PASS 28 animated three-tile mecha updates leave no residual bitmap artifacts')

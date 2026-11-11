@@ -1,5 +1,5 @@
 # CI de solo lectura. La publicación de Releases se realiza manualmente.
-name: Verificar GRIT CLAYMORE V1.0.1
+name: Verificar GRIT CLAYMORE V1.6
 
 on:
   push:
@@ -42,8 +42,8 @@ jobs:
         run: python3 -m pip install -r requirements.txt
       - name: Compilar TAP y ejecutar regresiones Z80
         run: python3 build_all.py
-      - name: Verificar identidad exacta con V1.0.1 publicada
+      - name: Verificar identidad exacta con V1.6 publicada
         run: |
           set -euo pipefail
-          echo "a233e7a176bbad3aa49e26579b8c965da45f9cc1152a6144a9230b1df3d27de3  juego/GRIT_CLAYMORE_V1.0.1_48K.tap" | sha256sum -c -
-          echo "a233e7a176bbad3aa49e26579b8c965da45f9cc1152a6144a9230b1df3d27de3  build/GRIT_CLAYMORE_V1.0.1_48K.tap" | sha256sum -c -
+          echo "8ea29ae17ada3ca62983b48bbac6385f07a5df47c773a7376b5a74d4ee082a8d  juego/GRIT_CLAYMORE_V1.6_48K.tap" | sha256sum -c -
+          echo "8ea29ae17ada3ca62983b48bbac6385f07a5df47c773a7376b5a74d4ee082a8d  build/GRIT_CLAYMORE_V1.6_48K.tap" | sha256sum -c -

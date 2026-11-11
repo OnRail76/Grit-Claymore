@@ -12,11 +12,10 @@ v.set('phase',1);v.set('sector',1);invoke(v,'scene_init')
 # Avoid spurious animated foreground over water for clean side-by-side sampling.
 v.set('frame',8)
 v.render(A/'V074_RIO_FRAME_1_SIMULADO.png')
-invoke(v,'erase_dynamic');v.set('frame',0);invoke(v,'animate_tiles')
-invoke(v,'draw_dynamic');invoke(v,'present_dirty')
-# The lower half is updated on the next logic tick to avoid a costly spike.
-invoke(v,'erase_dynamic');v.set('frame',1);invoke(v,'animate_tiles')
-invoke(v,'draw_dynamic');invoke(v,'present_dirty')
+# V1.3: ocho bandas de tres filas, una por tick.
+for band in range(8):
+    invoke(v,'erase_dynamic');v.set('frame',band);invoke(v,'animate_tiles')
+    invoke(v,'draw_dynamic');invoke(v,'present_dirty')
 v.render(A/'V074_RIO_FRAME_2_SIMULADO.png')
 images=[Image.open(A/f'V074_RIO_FRAME_{i}_SIMULADO.png').convert('RGB') for i in (1,2)]
 assert images[0].tobytes()!=images[1].tobytes(), 'expected visible differences in animated river'

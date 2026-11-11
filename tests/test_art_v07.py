@@ -12,8 +12,9 @@ def main():
  assert SYM['glyphs']-SYM['glyph_colors']==256
  assert SYM['glyph_masks']-SYM['glyphs']==2048
  assert SYM['map_pointers']-SYM['glyph_masks']==2048
- assert SYM['title_rle']-SYM['solid_flags']==256
- assert SYM['font_grit']-SYM['title_rle']==len((ROOT/'assets/TITULO_RLE_V07.bin').read_bytes())
+ assert SYM['map_rows']==SYM['map_rows_p1']
+ assert SYM['title_rle']==0x5e00  # V1.1: RLE reubicado al arrancar
+ assert SYM['gameover_rle_load']-SYM['title_rle_load']==len((ROOT/'assets/TITULO_RLE_V07.bin').read_bytes())
  assert SYM['hud_panel_map']-SYM['font_grit']==768
  assert SYM['hud_panel_glyphs']-SYM['hud_panel_map']==384
  assert 25 <= (SYM['map_p1_s1']-SYM['hud_panel_glyphs'])//8 < 256
@@ -37,7 +38,7 @@ def main():
   for sector in range(1,5):
    p=SYM[f'map_p{phase}_s{sector}']
    height=24 if sector==4 else 48
-   base=SYM['map_rows']
+   base=SYM[f'map_rows_p{phase}']  # V1.2: diccionario de filas por fase
    for row_index in v.m[p:p+height]:
     found.update(v.m[base+24*row_index:base+24*(row_index+1)])
   for name in names: assert macros[name] in found,(phase,name)

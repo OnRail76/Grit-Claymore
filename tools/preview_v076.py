@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 imgs=[
  ('JUEGO / HUD NUEVO',ROOT/'build/FASE_1_Z80_SIMULADA_V076.png'),
  ('LABORATORIO',ROOT/'build/FASE_2_Z80_SIMULADA_V076.png'),
- ('FASE 2 / 2 SEGUNDOS',ROOT/'build/FASE_2_PRESENTACION_V076.png'),
+ ('FASE 2 / 2 SEGUNDOS',ROOT/'build/FASE_2_PRESENTACION_V12.png'),
  ('GAME OVER / CALAVERA',ROOT/'assets/GAME_OVER_V076.png'),
 ]
 W,H=768,576;ow=W*2+48;oh=H*2+125

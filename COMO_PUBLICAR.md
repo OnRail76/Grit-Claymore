@@ -1,3 +1,15 @@
+# Publicar GRIT CLAYMORE V1.6
+
+Desde la carpeta extraída del paquete V1.6, con `git` y `gh` autenticados (`gh auth login` y `gh auth setup-git`):
+
+```bash
+./PUBLICAR_V1.6.sh
+```
+
+El script comprueba el SHA-256 del TAP, sustituye el contenido de `main` por el del paquete (sin tocar el historial), hace el commit y el push, y crea la Release `v1.6` con el TAP, dos capturas, la carátula, el atlas y el manual. Si la Release `v1.6` ya existe, no toca nada. Las Releases `v1.0` y `v1.0.1` no se modifican.
+
+---
+
 # Publicación histórica de GRIT CLAYMORE V1.0.1
 
 **Estado: publicada y cerrada.** [Descargar la Release V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1).

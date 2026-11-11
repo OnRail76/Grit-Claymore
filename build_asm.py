@@ -81,6 +81,7 @@ class A:
   simple={'nop':0x00,'halt':0x76,'di':0xf3,'ei':0xfb,'ret':0xc9,'rrca':0x0f,'rlca':0x07,'rra':0x1f,'rla':0x17,'scf':0x37,'ccf':0x3f,'cpl':0x2f,'exx':0xd9}
   if op in simple and not args:self.emit(simple[op]);return
   if op=='ldir':self.emit(0xed,0xb0);return
+  if op=='ldi':self.emit(0xed,0xa0);return
   if op=='lddr':self.emit(0xed,0xb8);return
   if op=='neg':self.emit(0xed,0x44);return
   if op=='ex':
@@ -149,6 +150,7 @@ class A:
   if op=='set' and args[1] in R:self.emit(0xcb,0xc0+8*self.ex(args[0])+R[args[1]]);return
   if op=='res' and args[1] in R:self.emit(0xcb,0x80+8*self.ex(args[0])+R[args[1]]);return
   if op=='in' and args==['a','(c)']:self.emit(0xed,0x78);return
+  if op=='in' and len(args)==2 and args[0]=='a':self.emit(0xdb,self.ex(args[1][1:-1])&255);return
   if op=='out' and args==['(c)','a']:self.emit(0xed,0x79);return
   if op=='out' and args[1]=='a':self.emit(0xd3,self.ex(args[0][1:-1])&255);return
   if op=='rst':self.emit(0xc7+self.ex(args[0]));return
@@ -173,6 +175,10 @@ class A:
        if lab in self.labels:raise ValueError('duplicate label')
        self.labels[lab]=self.pc
      if not s:continue
+     if s.lower().startswith('equ '):
+      # V1.1: "etiqueta: equ expr". Solo referencias a etiquetas ya definidas.
+      if numpass==0:self.labels[lab]=self.ex(s[4:].lower())
+      continue
      self.instr(s)
     except Exception as e:raise RuntimeError(f'line {n} ({orig}): {e}') from e
   return bytes(self.data)

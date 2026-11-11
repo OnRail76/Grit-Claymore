@@ -8,7 +8,7 @@ R=ROOT
 EN=SYM['enemies'];SP=SYM['special_shots']
 def slots(v,n=6):return [tuple(v.m[SP+i*5:SP+i*5+5]) for i in range(n)]
 def both(v):
- assert v.m[0x6000:0x7b00]==v.m[0x4000:0x5b00], 'shadow/display mismatch after presentation'
+ assert v.shadow()==bytes(v.m[0x4000:0x5b00]), 'shadow/display mismatch after presentation'
 def main():
  tap=(R/'build/GRIT_CLAYMORE_V078_48K.tap').read_bytes()
  i=0;blocks=[]
@@ -18,7 +18,7 @@ def main():
   assert len(block)==k and not __import__('functools').reduce(lambda a,b:a^b,block,0)
   blocks.append(block)
  assert i==len(tap) and len(blocks)==4 and blocks[-1][1:-1]==(R/'build/grit.bin').read_bytes()
- assert SYM['code_end']<0xffe0 and 0x7ff0-0x7b00>1024
+ assert SYM['code_end']<0xffe0 and SYM['bss_end']<=0xe000  # V1.1: sombra 0xE000, pila 0xFB00+
  print('PASS TAP blocks, checksums, code end and stack safety margin')
  vt=VM();vt.run_to(lambda v:v.pc==SYM['sr_wait'],steps=500000)
  assert vt.m[0x4000:0x5b00]==(R/'assets/TITULO_ESPECTRUM_V07.scr').read_bytes()
@@ -35,7 +35,7 @@ def main():
  invoke(v,'draw_dynamic');invoke(v,'present_dirty');both(v)
  print('PASS offscreen erasure does not blank visible sprites')
  # Three distinct floor colours and custom font, explicit no objective/kills HUD fields.
- clr=SYM['glyph_colors'];assert [v.m[clr+i] for i in (0,10,20)]==[6,0x47,5]
+ clr=SYM['glyph_colors'];assert [v.m[clr+i] for i in (0,10,20)]==[6,3,1]  # V1.2: tierra, baldosa magenta, placa azul
  src=(R/'src/grit_template.asm').read_text()
  assert 'hud_panel_map' in src and 'hud_panel_glyphs' in (R/'src/hud_generated.asm').read_text()
  assert 'OBJETIVO' not in src and 'BAJAS' not in src
@@ -45,7 +45,7 @@ def main():
  v.set('phase',3);v.set('sector',2);invoke(v,'scene_init')
  enemies=[tuple(v.m[EN+i*12:EN+i*12+12]) for i in range(3)]
  assert [e[2] for e in enemies]==[4,8,12]
- assert v.val('mecha_remaining')==3 and all(e[0]==1 for e in enemies)
+ assert v.val('mecha_remaining')==3 and all(e[0]==2 for e in enemies)  # V1.3: tipo 2 = mecha
  assert all(e[6]==6 for e in enemies)
  for f in range(80):
   v.set('frame',f)

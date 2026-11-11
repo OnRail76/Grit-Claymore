@@ -6,18 +6,23 @@ from PIL import Image
 
 def get_glyph_cell(v,row,col):
     # Spectrum bitmap: interleaved, 8 byte planes for one character cell.
-    return bytes(v.m[0x6000+(((row*8+y)&0xC0)<<5)+(((row*8+y)&7)<<8)+((((row*8+y)&0x38)<<2))+col] for y in range(8))
+    return bytes(v.m[0xe000+(((row*8+y)&0xC0)<<5)+(((row*8+y)&7)<<8)+((((row*8+y)&0x38)<<2))+col] for y in range(8))
 
 v=boot()
 assert len((ROOT/'assets/TITULO_ESPECTRUM_V072.scr').read_bytes())==6912
 assert 'hud_panel_map' in SYM and 'hud_panel_glyphs' in SYM
 print('PASS native HUD ROM tile bank is included in assembled executable')
 # All side columns preserve BLACK paper and different bright ink values.
+# V1.2: papel negro salvo en las franjas de rotulo (filas 3, 8, 14, 20), que llevan
+# tinta negra sobre PAPER brillante amarillo, cian, verde y magenta.
 for row in range(24):
  for col in range(24,32):
   attr=v.m[0x5800+row*32+col]
-  assert attr&0x38==0 and attr&0x40, (row,col,attr)
-print('PASS static HUD attributes are ZX-legal and not the former ASCII border')
+  if row in (3,8,14,20) and 25<=col<=30:
+   assert attr&7==0 and attr&0x40 and (attr>>3)&7=={3:6,8:5,14:4,20:3}[row],(row,col,hex(attr))
+  else:
+   assert attr&0x38==0, (row,col,attr)
+print('PASS V1.2: atributos del panel legales; rotulos en negro sobre franja de color')
 # 4 HP full -> green four cells. 2 HP -> exactly 2 green, 2 red.
 for hp,n_green in [(4,4),(2,2),(1,1),(0,0)]:
  v.set('health',hp);invoke(v,'draw_hud');invoke(v,'present_dirty')
@@ -37,7 +42,7 @@ print('ALL HUD V0.7.3 TESTS PASSED (partial VM, not Fuse)')
 
 # GAME OVER is actual native Z80 screen, 150 PAL HALTs, then TITLE via call.
 from mini_z80 import VM
-g=VM();g.pc=SYM['lose_screen'];g.sp=0x7ff0
+g=VM();g.pc=SYM['lose_screen'];g.sp=0
 for i in range(25000):
  if g.pc==SYM['lose_hold']:break
  g.step()

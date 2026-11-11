@@ -13,22 +13,23 @@ def check_animation():
  v.m[at]=4
  invoke(v,'draw_dynamic');invoke(v,'present_dirty')
  initial=bytes(v.m[0x4000:0x5b00])
- v.set('frame',0)
- invoke(v,'erase_dynamic');invoke(v,'animate_tiles');invoke(v,'draw_dynamic');invoke(v,'present_dirty')
+ # V1.1: el repintado se reparte en 4 bandas de 6 filas (ticks 0..3 de cada 8).
+ invoke(v,'erase_dynamic')
+ for f in range(4):v.set('frame',f);invoke(v,'animate_tiles')
+ invoke(v,'draw_dynamic');invoke(v,'present_dirty')
  flipped=[bytes(v.m[R['glyphs']+i*8:R['glyphs']+i*8+8]) for i in tileids]
  assert all(a!=b for a,b in zip(before,flipped)), 'all four glyphs must toggle'
- assert v.m[0x4000:0x5b00]==v.m[0x6000:0x7b00]
+ assert bytes(v.m[0x4000:0x5b00])==v.shadow()
  assert bytes(v.m[0x4000:0x5b00])!=initial, 'river animation not rendered'
  # No change between ticks; then exact first frame restored at tick 8.
- v.set('frame',1)
- invoke(v,'animate_tiles')  # lower rows, completes the same alternate image
- v.set('frame',3)
- invoke(v,'animate_tiles')
+ for f in (4,5,6,7):
+  v.set('frame',f);invoke(v,'animate_tiles')  # ticks 4..7: nothing toggles
  assert all(bytes(v.m[R['glyphs']+i*8:R['glyphs']+i*8+8])==b for i,b in zip(tileids,flipped))
- v.set('frame',8)
- invoke(v,'erase_dynamic');invoke(v,'animate_tiles');invoke(v,'draw_dynamic');invoke(v,'present_dirty')
+ invoke(v,'erase_dynamic')
+ for f in (8,9,10,11):v.set('frame',f);invoke(v,'animate_tiles')
+ invoke(v,'draw_dynamic');invoke(v,'present_dirty')
  assert all(bytes(v.m[R['glyphs']+i*8:R['glyphs']+i*8+8])==b for i,b in zip(tileids,before)), 'not strictly 1-2-1'
- assert v.m[0x4000:0x5b00]==v.m[0x6000:0x7b00]
+ assert bytes(v.m[0x4000:0x5b00])==v.shadow()
  print('PASS two-frame WATER, ANTENNA, TERMINAL, LED animation and shadow presentation')
 
 def check_piercing():
@@ -60,17 +61,18 @@ def check_all_stage_colours():
   # A live, static tile in each stage: color must not be lost on toggling.
   row,col=8,10
   v.m[R['map_data']+row*32+col]=tile
-  invoke(v,'erase_dynamic');v.set('frame',0)
-  invoke(v,'animate_tiles');invoke(v,'draw_dynamic');invoke(v,'present_dirty')
+  invoke(v,'erase_dynamic')
+  for f in range(4):v.set('frame',f);invoke(v,'animate_tiles')
+  invoke(v,'draw_dynamic');invoke(v,'present_dirty')
   screen_attr=0x5800+row*32+col
-  shadow_attr=0x7800+row*32+col
+  shadow_attr=0xf800+row*32+col
   expected=v.m[R['glyph_colors']+tile]
   assert v.m[screen_attr]==expected==v.m[shadow_attr],(phase,tile,expected,v.m[screen_attr])
-  assert all(v.m[0x5800+r*32+c]&0x38==0 for r in range(24) for c in range(24,32))
+  assert all(v.m[0x5800+r*32+c]&0x38==0 for r in range(24) for c in range(24,32) if not (r in (3,8,14,20) and 25<=c<=30))  # V1.2: franjas de rotulo
  print('PASS 4 stage animation types preserve 8x8 ZX attributes and fixed HUD')
 
 def check_source_and_limits():
- assert R['code_end']<0xffe0 and 0x7ff0-0x7b00>1024,hex(R['code_end'])
+ assert R['code_end']<0xffe0 and R['bss_end']<=0xe000,hex(R['code_end'])
  print('PASS memory boundary and stack separation:',hex(R['code_end']))
 if __name__=='__main__':
  check_source_and_limits();check_animation();check_piercing();check_all_stage_colours()

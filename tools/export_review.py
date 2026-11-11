@@ -48,7 +48,7 @@ manifest={
                       'RICE':211,'BRIDGE':215,'BARRACK':219,'WATCH':223,
                       'GATE':227,'DRUMS':231,'BUNKER':235,'CONSOLE':239,
                       'PIPEBANK':243,'MECH_DOCK':247},
- 'source_files':['src/grit_template.asm','tools/art_v07.py','src/maps_generated.asm',
+ 'source_files':['src/grit_template.asm','tools/art_v12.py','tools/gfx_v12.py','src/maps_generated.asm',
                  'src/sprites_generated.asm','src/solid_generated.asm'],
  'compiled_symbols':{k:SYM[k] for k in ('glyph_colors','glyphs','glyph_masks','solid_flags','map_data','code_end')},
  'screen_exports':'These .SCR files were reconstructed from a partial-Z80 VM, not tested in Fuse.',

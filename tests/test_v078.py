@@ -8,7 +8,7 @@ from harness import boot,invoke,tick
 assert all(x not in SYM for x in ('cheat_invincible','update_cheat','cheat_state','cheat_previous','cheat_prev_space'))
 print('PASS no invincibility cheat symbols remain')
 # Force enter victory, including a held SPACE from the battle.
-v=VM();v.sp=0x7ff0;v.pc=SYM['win_screen'];v.keys={'SPACE'}
+v=VM();v.sp=0;v.pc=SYM['win_screen'];v.keys={'SPACE'}
 v.run_to(lambda v:v.pc==SYM['win_hold'],steps=200000)
 assert v.m[0x4000:0x5b00]==(ROOT/'assets/VICTORIA_V078_48K.scr').read_bytes()
 assert v.r[0]==150, v.r[0]

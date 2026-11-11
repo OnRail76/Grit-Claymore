@@ -2,7 +2,7 @@
 
 **Un pequeño arcade de disparos para 48K de Spectrum.**
 
-**ZX Spectrum 48K · Código máquina Z80 · Tony C. Ware · 2026 · V1.0.1**
+**ZX Spectrum 48K · Código máquina Z80 · Tony C. Ware · 2026 · V1.6**
 
 ![Carátula oficial](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png)
 
@@ -16,9 +16,9 @@ Tres fases de arcade vertical, scroll por bloques, sprites enmascarados, gráfic
 
 ## Descargar y jugar
 
-**[Descargar la Release oficial V1.0.1 (juego, manual, atlas y carátula)](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1)**
+**[Descargar la Release V1.6 (juego, manual, atlas y carátula)](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.6)**
 
-También puedes obtener [solo el TAP V1.0.1](juego/GRIT_CLAYMORE_V1.0.1_48K.tap). La [Release V1.0 original](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conserva sin cambios.
+También puedes obtener [solo el TAP V1.6](juego/GRIT_CLAYMORE_V1.6_48K.tap). Las Releases [V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1) y [V1.0](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conservan sin cambios.
 
 Carga el archivo en **Fuse** seleccionando la máquina **Spectrum 48K**. El juego utiliza el sonido beeper y teclado.
 
@@ -29,14 +29,66 @@ Carga el archivo en **Fuse** seleccionando la máquina **Spectrum 48K**. El jueg
 | O | Izquierda |
 | P | Derecha |
 | ESPACIO | Disparo / empezar |
+| H | Pausa (borde azul); otra pulsación reanuda |
+| 6 / 7 / 8 / 9 / 0 | Joystick Sinclair (Interface 2): izquierda / derecha / abajo / arriba / fuego |
+| Joystick Kempston | Empieza la partida con su FUEGO para jugar con joystick; con SPACE se juega con teclado |
 
-Grit se mueve y dispara en ocho direcciones; el tanque se mueve y dispara en cuatro. Las raciones recuperan energía. Los proyectiles del tanque atraviesan obstáculos y el vehículo arrolla a soldados. La fase 3 se juega a pie, contra mechas y el Hind del Comisario.
+Grit se mueve y dispara en ocho direcciones, con hasta dos balas en pantalla; el tanque se mueve y dispara en cuatro y aguanta cuatro impactos. Hay una ración en cada sector y recupera energía. Los proyectiles del tanque atraviesan obstáculos y el vehículo arrolla a soldados. Cada fase termina con su propio jefe: la lancha patrullera, el camión blindado y el Hind del Comisario. La fase 3 se juega a pie, contra mechas.
 
 ### Pantalla de título actualizada (V1.0.1)
 
 ![Pantalla de título ZX Spectrum con controles visibles](recursos/juego/TITULO.png)
 
 La pantalla de título muestra **Q/A/O/P MOVER · SPACE FUEGO · PULSA SPACE** en la última fila negra, sin modificar la ilustración, los créditos ni la rutina de inicio. El resto del juego permanece como en V1.0. La Release V1.0 se conserva en el historial.
+
+## Novedades de la V1.6
+
+- **Grit ya no se queda atrapado:** el scroll respeta el terreno y los 12 mapas están revisados.
+
+## Novedades de la V1.5: cañón de plasma
+
+![Cañón de plasma](recursos/V1.5/PLASMA_FASE_3.png)
+
+- **Dos cajas de armas en la fase 3.** Cada una da 12 disparos de plasma que atraviesan muros y soldados: un mecha cae con dos.
+- En la fase 3 el módulo TANQUE del panel pasa a ser **ARMA** y cuenta la munición.
+
+## Novedades de la V1.4
+
+- **Una ración en cada sector** y otra de refuerzo en la fase 3.
+- **El tanque aguanta cuatro impactos**, con marcador de cuatro celdas.
+
+## Novedades de la V1.3: más enemigos y más difícil
+
+- **Cuatro enemigos a la vez**, refuerzos más frecuentes y soldados que se dan la vuelta y disparan hacia arriba.
+- **Tres tipos de soldado** distinguibles por el casco: rojo (fijo), magenta (patrulla) y cian (asalto).
+- **Fase 3:** oleadas de mechas (8–9 por sector) con un soldado de apoyo.
+- **Jefes más duros**, **ruido de motor** en el tanque y **Kempston automático** según el fuego con el que se empiece.
+
+Detalle en [RELEASE_NOTES_V1.3.md](RELEASE_NOTES_V1.3.md).
+
+## Novedades de la V1.2: remozado gráfico
+
+![Fase 1 V1.2](recursos/V1.2/FASE_1_SECTOR_4.png)
+
+- **Los 256 gráficos redibujados a mano**, con color por celda y una paleta propia para cada fase.
+- **Tres jefes distintos:** lancha patrullera, camión blindado y un Hind Mi-24 redibujado, cada uno en su propia arena.
+- **Panel lateral nuevo:** bisel remachado, rótulos sobre franja de color y la cabeza de Grit como icono de vida.
+- **Balas más rápidas que el scroll:** al avanzar ya no se quedan quietas en pantalla.
+- **Tarjeta de fase enmarcada** con el retrato del jefe y el récord.
+- Título, Game Over y Victoria conservan las ilustraciones aprobadas.
+
+Capturas sacadas del Z80 ensamblado en [recursos/V1.2](recursos/V1.2/). Detalle en [RELEASE_NOTES_V1.2.md](RELEASE_NOTES_V1.2.md).
+
+## Novedades de la V1.1
+
+- **Jefes sin zona segura:** en la arena del jefe no se puede subir de la fila 9.
+- **Marcador real de seis cifras**, puntos por jefe (2.000 / 3.000 / 4.000), 300 por mecha, vida extra cada 10.000 y **récord de la sesión** en la tarjeta de fase.
+- **El mapa cuenta para todos:** los soldados ya no pisan agua ni cabañas y los muros paran también las balas enemigas. El agua impide andar, pero no disparar por encima.
+- **Motor más rápido:** scroll en anillo (el doble de pasos por segundo), animación de tiles repartida, sincronía por `FRAMES`, pantalla sombra fuera de la memoria contendida y mechas pintados de una pasada.
+- **Sonido que no congela el juego**, melodía en el título, secuencia de muerte y fanfarria de jefe.
+- **Joystick Kempston y Sinclair, pausa, ración en columna variable** y cinta 600 bytes más corta.
+
+Detalle y mediciones en [RELEASE_NOTES_V1.1.md](RELEASE_NOTES_V1.1.md) y en el [registro de cambios](documentacion/CHANGELOG.md). El manual y el atlas en PDF siguen describiendo la V1.0.x: no recogen todavía estos cambios.
 
 ## Documentación ilustrada
 
@@ -59,11 +111,11 @@ python -m pip install -r requirements.txt
 python build_all.py
 ```
 
-El banco genera `build/GRIT_CLAYMORE_V1.0.1_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. La [verificación automática de GitHub Actions](.github/workflows/verificar-grit.yml) comprueba que el TAP reconstruido sea **idéntico byte por byte** al publicado y no modifica las Releases. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
+El banco genera `build/GRIT_CLAYMORE_V1.6_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. La [verificación automática de GitHub Actions](.github/workflows/verificar-grit.yml) comprueba que el TAP reconstruido sea **idéntico byte por byte** al publicado y no modifica las Releases. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
 
-La V1.0.1 conserva la jugabilidad aprobada en V1.0, incluido el centrado exacto de los tres iconos de vidas. **La compilación está verificada mediante pruebas automatizadas; no hay certificación de esta última revisión en Fuse real.**
+El archivo [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) documenta las huellas del **paquete de publicación V1.6**.
 
-El archivo [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) documenta las huellas del **paquete de publicación V1.0.1**, no pretende ser un inventario actualizado de cambios posteriores en textos de mantenimiento.
+La V1.6 está verificada con 13 baterías de pruebas automáticas sobre un **intérprete Z80 parcial**, que no modela tiempos reales, contención de memoria, carga de cinta ni sonido. No hay certificación de esta versión en Fuse ni en hardware real. Se publica con [PUBLICAR_V1.6.sh](PUBLICAR_V1.6.sh); `PUBLICAR_EN_GITHUB.sh` y `COMO_PUBLICAR.md` documentan la publicación histórica de la V1.0.1.
 
 ## Licencias y derechos
 

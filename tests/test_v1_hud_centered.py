@@ -20,9 +20,9 @@ for row_in_tile in range(8):
 assert xs, 'VIDAS has no visible pixels'
 assert min(xs)==12 and max(xs)==51, (min(xs),max(xs))
 assert (min(xs)+max(xs))/2==31.5, 'VIDAS group not centered at the HUD midpoint'
-assert all(v.m[0x5800+10*32+c] == 0x46 for c in range(25,31))
+assert all(v.m[0x5800+10*32+c] == 0x44 for c in range(25,31))  # V1.2: cabezas de Grit
 print('PASS VIDAS centered to exact x=31.5 midpoint of 64px sidebar; 3 smileys within 48px')
 # Ensure other indicators are unaffected by the precise offset.
 assert [v.m[0x5800+16*32+c] for c in range(26,30)]==[0x44]*4
-assert [v.m[0x5800+22*32+c] for c in range(27,29)]==[0x42]*2
+assert [v.m[0x5800+22*32+c] for c in range(26,30)]==[0x42]*4  # V1.4: TANQUE de 4 celdas
 print('PASS PODER and TANQUE indicators unchanged')

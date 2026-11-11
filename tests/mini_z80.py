@@ -10,6 +10,10 @@ SYM=json.loads((ROOT/'build/grit.sym.json').read_text())
 class VM:
  def __init__(self):
   self.m=bytearray(65536);binary=(ROOT/'build/grit.bin').read_bytes();self.m[32768:32768+len(binary)]=binary
+  # V1.1: 'entry' baja las pantallas RLE a 0x5E00. Se deja hecho de antemano para
+  # las pruebas que saltan directamente a una rutina sin pasar por 'entry'.
+  n=SYM['rle_block_end']-SYM['rle_block'];self.m[0x5e00:0x5e00+n]=self.m[SYM['rle_block']:SYM['rle_block']+n]
+  self.kempston=0xff  # sin interfaz: bus flotante
   self.r=[0]*8 # B,C,D,E,H,L,(HL),A
   self.sp=0xffff;self.pc=32768;self.f=0;self.ix=0;self.iy=0;self.steps=0;self.keys=set();self.port_writes=0
   # ROM font mock for static analysis and proof of tile drawing, not Sinclair ROM pixels.
@@ -63,11 +67,16 @@ class VM:
    if 'P' in self.keys:v&=~1
    if 'O' in self.keys:v&=~2
   if b==0x7f and 'SPACE' in self.keys:v&=~1
+  if b==0xef:
+   for bit,k in enumerate('09876'):
+    if k in self.keys:v&=~(1<<bit)
+  if b==0xbf and 'H' in self.keys:v&=~16
   return v
  def signed(self,v):return v-256 if v&128 else v
  def step(self):
   at=self.pc;op=self.rd();self.steps+=1
-  if op in (0x00,0x76,0xf3,0xfb):return
+  if op==0x76:self.m[0x5c78]=(self.m[0x5c78]+1)&255;return  # HALT = una interrupcion: FRAMES+1
+  if op in (0x00,0xf3,0xfb):return
   if op==0xc9:self.pc=self.pop();return
   if op==0xeb:
    d=self.r16(1);self.set16(1,self.hl());self.sethl(d);return
@@ -129,9 +138,14 @@ class VM:
    if which is None or self.cond(which):self.pc=(self.pc+j)&65535
    return
   if op==0xd3:self.rd();self.port_writes+=1;return
+  if op==0xdb:
+   port=self.rd();self.r[7]=self.kempston if port==0x1f else 0xff;return
   if op==0xed:
    x=self.rd()
    if x==0x78:self.r[7]=self.portread();return
+   if x==0xa0:
+    src=self.hl();dst=self.r16(1);self.m[dst]=self.m[src]
+    self.sethl(src+1);self.set16(1,dst+1);self.set16(0,self.r16(0)-1);return
    if x in (0x4b,0x5b,0x6b,0x7b):
     addr=self.word();rr={0x4b:0,0x5b:1,0x6b:2,0x7b:3}[x];self.set16(rr,self.m[addr]|(self.m[(addr+1)&65535]<<8));return
    if x==0xb8:
@@ -166,6 +180,7 @@ class VM:
    if x==0x35:self.m[addr]=(self.m[addr]-1)&255;return
    if 0x46<=x<=0x7e and x&7==6:self.r[(x>>3)&7]=self.m[addr];return
    if 0x70<=x<=0x77:self.m[addr]=self.reg(x&7);return
+   if 0x80<=x<=0xbf and x&7==6:self.alu((x>>3)&7,self.m[addr]);return
    raise RuntimeError(f'unknown {prefix} {x:02x} at {at:04x}')
   raise RuntimeError(f'unknown opcode {op:02x} @ {at:04x} after {self.steps} steps')
  def run_to(self,check,steps=1_000_000):
@@ -173,6 +188,17 @@ class VM:
    if check(self):return self.steps
    self.step()
   raise TimeoutError(f'at {self.pc:04x} after {self.steps}, waiting for {check}')
+ def shadow(self):
+  """V1.1: pantalla sombra (0xE000) reordenada como la pantalla real. La zona de
+  juego (columnas 0..23) es un anillo: fila logica d = fila fisica (d+shadow_top)%24."""
+  top=self.m[SYM['shadow_top']];out=bytearray(6912)
+  for d in range(24):
+   for c in range(32):
+    p=(d+top)%24 if c<24 else d
+    for y in range(8):
+     out[((d&24)<<8)+y*256+((d&7)<<5)+c]=self.m[0xe000+((p&24)<<8)+y*256+((p&7)<<5)+c]
+    out[6144+d*32+c]=self.m[0xf800+p*32+c]
+  return bytes(out)
  def val(self,label):return self.m[SYM[label]]
  def set(self,label,val):self.m[SYM[label]]=val
  def render(self,out,scale=3):
