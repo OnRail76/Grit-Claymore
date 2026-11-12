@@ -16,9 +16,9 @@ Tres fases de arcade vertical, scroll por bloques, sprites enmascarados, gráfic
 
 ## Descargar y jugar
 
-**[Descargar la Release V1.6 (juego, manual, atlas y carátula)](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.6)**
+**[Descargar el TAP V1.6 (versión actual en el repositorio)](juego/GRIT_CLAYMORE_V1.6_48K.tap)**
 
-También puedes obtener [solo el TAP V1.6](juego/GRIT_CLAYMORE_V1.6_48K.tap). Las Releases [V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1) y [V1.0](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conservan sin cambios.
+El código fuente y el TAP V1.6 ya están publicados en `main`. **La Release V1.6 está pendiente de publicación manual**, por separado, sin reemplazar archivos del repositorio. Consulta [cómo prepararla sin riesgo](COMO_PUBLICAR.md). Las Releases históricas [V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1) y [V1.0](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conservan sin cambios.
 
 Carga el archivo en **Fuse** seleccionando la máquina **Spectrum 48K**. El juego utiliza el sonido beeper y teclado.
 
@@ -111,11 +111,11 @@ python -m pip install -r requirements.txt
 python build_all.py
 ```
 
-El banco genera `build/GRIT_CLAYMORE_V1.6_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. La [verificación automática de GitHub Actions](.github/workflows/verificar-grit.yml) comprueba que el TAP reconstruido sea **idéntico byte por byte** al publicado y no modifica las Releases. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
+El banco genera `build/GRIT_CLAYMORE_V1.6_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. La [verificación automática de GitHub Actions](.github/workflows/verificar-grit.yml) comprueba que el TAP reconstruido sea **idéntico byte por byte** al TAP V1.6 versionado y no modifica las Releases. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
 
 El archivo [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) documenta las huellas del **paquete de publicación V1.6**.
 
-La V1.6 está verificada con 13 baterías de pruebas automáticas sobre un **intérprete Z80 parcial**, que no modela tiempos reales, contención de memoria, carga de cinta ni sonido. No hay certificación de esta versión en Fuse ni en hardware real. Se publica con [PUBLICAR_V1.6.sh](PUBLICAR_V1.6.sh); `PUBLICAR_EN_GITHUB.sh` y `COMO_PUBLICAR.md` documentan la publicación histórica de la V1.0.1.
+La V1.6 está verificada con 13 baterías de pruebas automáticas sobre un **intérprete Z80 parcial**, que no modela tiempos reales, contención de memoria, carga de cinta ni sonido. La certificación de esta versión en Fuse o hardware real queda fuera de estas pruebas. **No se utilizan scripts de publicación automática ni se sustituye el árbol Git:** la [Release V1.6 se creará manualmente](COMO_PUBLICAR.md) cuando el autor lo decida.
 
 ## Licencias y derechos
 
