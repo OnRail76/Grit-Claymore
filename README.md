@@ -16,9 +16,9 @@ Tres fases de arcade vertical, scroll por bloques, sprites enmascarados, gráfic
 
 ## Descargar y jugar
 
-**[Descargar el TAP V1.6 (versión actual en el repositorio)](juego/GRIT_CLAYMORE_V1.6_48K.tap)**
+**[Descargar GRIT CLAYMORE V1.6 — Release oficial](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.6)** · [TAP V1.6 en el repositorio](juego/GRIT_CLAYMORE_V1.6_48K.tap)
 
-El código fuente y el TAP V1.6 ya están publicados en `main`. **La Release V1.6 está pendiente de publicación manual**, por separado, sin reemplazar archivos del repositorio. Consulta [cómo prepararla sin riesgo](COMO_PUBLICAR.md). Las Releases históricas [V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1) y [V1.0](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conservan sin cambios.
+La **Release V1.6 ya está publicada**, con el TAP, el [ZIP completo con fuentes](https://github.com/OnRail76/Grit-Claymore/releases/download/v1.6/GRIT_CLAYMORE_V1.6_COMPLETO_CON_FUENTES.zip), la portada oficial, el manual, el atlas y capturas. El código y los archivos del juego siguen accesibles en `main`. Las Releases históricas [V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1) y [V1.0](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conservan sin cambios.
 
 Carga el archivo en **Fuse** seleccionando la máquina **Spectrum 48K**. El juego utiliza el sonido beeper y teclado.
 
@@ -115,7 +115,7 @@ El banco genera `build/GRIT_CLAYMORE_V1.6_48K.tap` (y un TAP de compatibilidad p
 
 El archivo [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) es un **registro histórico de las huellas del paquete original V1.6**. No representa un inventario actualizado tras la limpieza de los scripts de publicación y la documentación; para comprobar el juego utiliza el SHA-256 del TAP indicado en [las notas V1.6](RELEASE_NOTES_V1.6.md).
 
-La V1.6 está verificada con 13 baterías de pruebas automáticas sobre un **intérprete Z80 parcial**, que no modela tiempos reales, contención de memoria, carga de cinta ni sonido. La certificación de esta versión en Fuse o hardware real queda fuera de estas pruebas. **No se utilizan scripts de publicación automática ni se sustituye el árbol Git:** la [Release V1.6 se creará manualmente](COMO_PUBLICAR.md) cuando el autor lo decida.
+La V1.6 está verificada con 13 baterías de pruebas automáticas sobre un **intérprete Z80 parcial**, que no modela tiempos reales, contención de memoria, carga de cinta ni sonido. La certificación de esta versión en Fuse o hardware real queda fuera de estas pruebas. **No se utilizan scripts de publicación automática ni se sustituye el árbol Git:** la Release V1.6 se publicó manualmente. Para futuras versiones seguimos el [procedimiento seguro](COMO_PUBLICAR.md).
 
 ## Licencias y derechos
 
