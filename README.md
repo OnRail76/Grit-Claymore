@@ -113,7 +113,7 @@ python build_all.py
 
 El banco genera `build/GRIT_CLAYMORE_V1.6_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. La [verificación automática de GitHub Actions](.github/workflows/verificar-grit.yml) comprueba que el TAP reconstruido sea **idéntico byte por byte** al TAP V1.6 versionado y no modifica las Releases. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
 
-El archivo [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) documenta las huellas del **paquete de publicación V1.6**.
+El archivo [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) es un **registro histórico de las huellas del paquete original V1.6**. No representa un inventario actualizado tras la limpieza de los scripts de publicación y la documentación; para comprobar el juego utiliza el SHA-256 del TAP indicado en [las notas V1.6](RELEASE_NOTES_V1.6.md).
 
 La V1.6 está verificada con 13 baterías de pruebas automáticas sobre un **intérprete Z80 parcial**, que no modela tiempos reales, contención de memoria, carga de cinta ni sonido. La certificación de esta versión en Fuse o hardware real queda fuera de estas pruebas. **No se utilizan scripts de publicación automática ni se sustituye el árbol Git:** la [Release V1.6 se creará manualmente](COMO_PUBLICAR.md) cuando el autor lo decida.
 
