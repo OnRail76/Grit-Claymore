@@ -31,4 +31,3 @@ def assert_panel_preserved(v,before):
   for x in range(24,32):
    addr=0x5800+row*32+x
    assert v.m[addr]==before[addr],('HUD attribute corrupted',row,x)
-

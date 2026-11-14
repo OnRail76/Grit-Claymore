@@ -9,7 +9,7 @@ def main():
  v=boot()
  b=(ROOT/'build/grit.bin').read_bytes()
  assert len(b)<0x7fe0
- assert SYM['glyphs']-SYM['glyph_colors']==256
+ assert SYM['glyph_colors']==0x5d00  # V1.9: los colores se bajan a 0x5D00 al arrancar
  assert SYM['glyph_masks']-SYM['glyphs']==2048
  assert SYM['map_pointers']-SYM['glyph_masks']==2048
  assert SYM['map_rows']==SYM['map_rows_p1']
