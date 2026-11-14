@@ -1,149 +1,71 @@
 # GRIT CLAYMORE
 
-**Un pequeño arcade de disparos para 48K de Spectrum.**
+**Edición definitiva v1.9 · ZX Spectrum 48K · 2026 · Tony C. Ware**
 
-**ZX Spectrum 48K · Código máquina Z80 · Tony C. Ware · 2026 · V1.9**
+![Carátula oficial expresionista](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png)
 
-![Carátula oficial expresionista de GRIT CLAYMORE V1.9](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png)
+## La misión
 
-## El juego
-
-En el presente, Grit Claymore, operativo del **EFEC (European Federation Enforcer Corps)** —organización ficticia vinculada al EU INTCEN dentro de la historia—, se infiltra en una región remota de Vietnam para destruir una red de narcotráfico, desmantelar el armamento experimental del ejército renegado y detener a **El Comisario**.
-
-Tres fases de arcade vertical, scroll por bloques, sprites enmascarados, gráficos propios y animaciones ambientales de dos fotogramas. Un homenaje a la claridad visual de **Who Dares Wins II** y los primeros **Ultima**.
+En 2026, Grit Claymore, operativo de la **EFEC (European Federation Enforcer Corps)** —organización ficticia vinculada al EU INTCEN—, llega a Vietnam para desmantelar el tráfico de drogas y armamento experimental de un ejército renegado y detener a **El Comisario**.
 
 **El mundo no se salvará por sí mismo.**
 
-## Descargar y jugar
+## Descargar la edición definitiva
 
-**[Descargar release oficial v1.9](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.9)** · [TAP directo](juego/GRIT_CLAYMORE_V1.9_48K.tap).
+**[GRIT CLAYMORE v1.9 — Release oficial](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.9)** · [TAP para ZX Spectrum 48K](juego/GRIT_CLAYMORE_V1.9_48K.tap)
 
-El paquete completo de la release contiene los fuentes originales necesarios, herramientas, pruebas, recursos reales y documentación; se excluyen binarios intermedios regenerables. Las Releases históricas [V1.6](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.6), [V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1) y [V1.0](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conservan sin cambios.
+La v1.9 es la **única edición de distribución vigente**. Las publicaciones antiguas se retiran después de preservar su material gráfico y documental en el **[archivo artístico y editorial](https://github.com/OnRail76/Grit-Claymore/releases/download/v1.9/GRIT_CLAYMORE_ARCHIVO_ARTISTICO_HISTORICO.zip)**. Los cambios técnicos anteriores siguen documentados en el [historial de desarrollo](documentacion/CHANGELOG.md) y en el historial de Git.
 
-Carga el archivo en **Fuse** seleccionando la máquina **Spectrum 48K**. El juego utiliza el sonido beeper y teclado.
+## Controles
 
 | Tecla | Acción |
 |---|---|
-| Q | Arriba |
-| A | Abajo |
-| O | Izquierda |
-| P | Derecha |
-| ESPACIO | Disparo / empezar |
-| H | Pausa (borde azul); otra pulsación reanuda |
-| 6 / 7 / 8 / 9 / 0 | Joystick Sinclair (Interface 2): izquierda / derecha / abajo / arriba / fuego |
-| Joystick Kempston | Empieza la partida con su FUEGO para jugar con joystick; con SPACE se juega con teclado |
+| **Q / A / O / P** | Arriba / abajo / izquierda / derecha |
+| **ESPACIO** | Disparar / iniciar partida |
+| **H** | Pausar / reanudar |
+| **Sinclair 6 / 7 / 8 / 9 / 0** | Izquierda / derecha / abajo / arriba / disparo |
+| **Kempston** | Empezar con FIRE para jugar con joystick |
 
-Grit se mueve y dispara en ocho direcciones, con hasta dos balas en pantalla; el tanque se mueve y dispara en cuatro y aguanta cuatro impactos. Hay una ración en cada sector y recupera energía. Los proyectiles del tanque atraviesan obstáculos y el vehículo arrolla a soldados. Cada fase termina con su propio jefe: la lancha patrullera, el camión blindado y el Hind del Comisario. La fase 3 se juega a pie, contra mechas.
+## El arcade
 
-### Pantalla de título actualizada (V1.0.1)
+Tres fases de disparos con movimiento en ocho direcciones, tres sectores temáticos y scroll por bloques. Grit se enfrenta a soldados, mechas y a los jefes de cada fase: **lancha patrullera, camión blindado y helicóptero Hind**.
 
-![Pantalla de título ZX Spectrum con controles visibles](recursos/juego/TITULO.png)
+El **tanque** se utiliza en las primeras fases, soporta cuatro impactos y dispara proyectiles perforantes. La fase final se juega a pie y permite recoger el **cañón de plasma**.
 
-La pantalla de título muestra **Q/A/O/P MOVER · SPACE FUEGO · PULSA SPACE** en la última fila negra, sin modificar la ilustración, los créditos ni la rutina de inicio. El resto del juego permanece como en V1.0. La Release V1.0 se conserva en el historial.
+### Mejoras de la edición definitiva
 
-## Carátula oficial de la V1.9
+- **Jefes con puntería**, disparos rectos o diagonales hacia Grit y aviso visual antes de disparar.
+- **Fase de rabia** de los jefes al perder la mitad de su resistencia.
+- **Soldados más reactivos**, emboscadas y apariciones variadas, especialmente al avanzar corriendo.
+- **Tanque con inercia y señalización visual** de dirección y daños.
+- Música del título una sola vez por visita, pausa, joystick Kempston/Sinclair y ajustes acumulados de control y mapas.
 
-La portada **expresionista**, anteriormente la alternativa 03, pasa a ser la **carátula oficial** del juego desde esta edición. La carátula militar clásica de la v1.0 se conserva sin retoques en [alternativas](caratula/alternativas/README.md). La documentación artística se actualiza sin alterar los gráficos del juego.
+Las características completas están descritas en [RELEASE_NOTES_V1.9.md](RELEASE_NOTES_V1.9.md).
 
-## Novedades de la V1.9
+## Manual, atlas y carátulas
 
-- **Jefes que apuntan.** La lancha, el camión y el Hind ya no disparan a ciegas desde su centro: si estás debajo, disparan recto desde la columna que tienes encima; si no, en diagonal hacia ti desde su borde más cercano. La lancha dispara el doble de a menudo.
-- **Rabia a mitad de vida.** Al perder la mitad de la vida, el jefe parpadea en rojo, se mueve el doble de rápido, dispara más a menudo y siempre en abanico de tres.
-- **Aviso antes de disparar.** El jefe destella en blanco los cuatro ticks previos a cada disparo: con atención, siempre se puede esquivar.
-- **Tanque.** Más pesado (una casilla cada 4 ticks, la mitad que a pie), casco verde con el cañón en blanco para ver a dónde apunta, y parpadea en rojo al recibir un impacto.
+- [**Manual de instrucciones definitivo**](documentacion/GRIT_CLAYMORE_MANUAL_V1_9_OFICIAL.pdf), con la carátula oficial en la primera página.
+- [**Atlas visual de la edición definitiva**](documentacion/GRIT_CLAYMORE_ATLAS_VISUAL_V1_9.pdf).
+- [**Carátula oficial expresionista**](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png).
+- [**Tres carátulas alternativas**](caratula/alternativas/README.md), incluida la antigua portada militar oficial.
+- [**Archivo artístico y editorial histórico**](https://github.com/OnRail76/Grit-Claymore/releases/download/v1.9/GRIT_CLAYMORE_ARCHIVO_ARTISTICO_HISTORICO.zip), que conserva los PDF e ilustraciones originales de las primeras publicaciones.
+- [**Recursos originales y capturas del motor**](recursos/juego/).
 
-## Novedades de la V1.8
+Las imágenes extraídas de RAM proceden de pruebas con un intérprete Z80 parcial; no se presentan como capturas certificadas de Fuse o hardware real. Los PDF de las primeras ediciones se archivan como documentos históricos, no se reemplazan con recreaciones.
 
-- **Correr ya no sale gratis.** Si Grit avanza sin parar, los soldados reaccionan casi sin aviso, llegan refuerzos el doble de rápido y aparecen emboscadas **por detrás**, cerca de él. Sus balas hacia arriba van al doble de velocidad y corrigen la columna hacia Grit: ya no basta con huir, hay que apartarse o pelear.
-- **Apariciones variadas.** Nuevo generador aleatorio (xorshift de 16 bits): se acabaron las rachas en la misma columna. Además de por arriba, los soldados entran por los lados a media pantalla, siempre en suelo libre y nunca encima de Grit.
-- **El rojo es un tirador.** Solo se queda quieto donde tiene 4 filas de vista despejada (si no, sale al asalto), ve a 12 columnas en lugar de 8 y recarga antes.
-
-## Novedades de la V1.7
-
-- **La melodía del título suena una vez** cada vez que se llega a la pantalla de título, y después silencio hasta pulsar fuego.
-
-## Novedades de la V1.6
-
-- **Grit ya no se queda atrapado:** el scroll respeta el terreno y los 12 mapas están revisados.
-
-## Novedades de la V1.5: cañón de plasma
-
-![Cañón de plasma](recursos/V1.5/PLASMA_FASE_3.png)
-
-- **Dos cajas de armas en la fase 3.** Cada una da 12 disparos de plasma que atraviesan muros y soldados: un mecha cae con dos.
-- En la fase 3 el módulo TANQUE del panel pasa a ser **ARMA** y cuenta la munición.
-
-## Novedades de la V1.4
-
-- **Una ración en cada sector** y otra de refuerzo en la fase 3.
-- **El tanque aguanta cuatro impactos**, con marcador de cuatro celdas.
-
-## Novedades de la V1.3: más enemigos y más difícil
-
-- **Cuatro enemigos a la vez**, refuerzos más frecuentes y soldados que se dan la vuelta y disparan hacia arriba.
-- **Tres tipos de soldado** distinguibles por el casco: rojo (fijo), magenta (patrulla) y cian (asalto).
-- **Fase 3:** oleadas de mechas (8–9 por sector) con un soldado de apoyo.
-- **Jefes más duros**, **ruido de motor** en el tanque y **Kempston automático** según el fuego con el que se empiece.
-
-Detalle en [RELEASE_NOTES_V1.3.md](RELEASE_NOTES_V1.3.md).
-
-## Novedades de la V1.2: remozado gráfico
-
-![Fase 1 V1.2](recursos/V1.2/FASE_1_SECTOR_4.png)
-
-- **Los 256 gráficos redibujados a mano**, con color por celda y una paleta propia para cada fase.
-- **Tres jefes distintos:** lancha patrullera, camión blindado y un Hind Mi-24 redibujado, cada uno en su propia arena.
-- **Panel lateral nuevo:** bisel remachado, rótulos sobre franja de color y la cabeza de Grit como icono de vida.
-- **Balas más rápidas que el scroll:** al avanzar ya no se quedan quietas en pantalla.
-- **Tarjeta de fase enmarcada** con el retrato del jefe y el récord.
-- Título, Game Over y Victoria conservan las ilustraciones aprobadas.
-
-Capturas sacadas del Z80 ensamblado en [recursos/V1.2](recursos/V1.2/). Detalle en [RELEASE_NOTES_V1.2.md](RELEASE_NOTES_V1.2.md).
-
-## Novedades de la V1.1
-
-- **Jefes sin zona segura:** en la arena del jefe no se puede subir de la fila 9.
-- **Marcador real de seis cifras**, puntos por jefe (2.000 / 3.000 / 4.000), 300 por mecha, vida extra cada 10.000 y **récord de la sesión** en la tarjeta de fase.
-- **El mapa cuenta para todos:** los soldados ya no pisan agua ni cabañas y los muros paran también las balas enemigas. El agua impide andar, pero no disparar por encima.
-- **Motor más rápido:** scroll en anillo (el doble de pasos por segundo), animación de tiles repartida, sincronía por `FRAMES`, pantalla sombra fuera de la memoria contendida y mechas pintados de una pasada.
-- **Sonido que no congela el juego**, melodía en el título, secuencia de muerte y fanfarria de jefe.
-- **Joystick Kempston y Sinclair, pausa, ración en columna variable** y cinta 600 bytes más corta.
-
-Detalle y mediciones en [RELEASE_NOTES_V1.1.md](RELEASE_NOTES_V1.1.md) y en el [registro de cambios](documentacion/CHANGELOG.md). Los PDF anteriores describían la V1.0.x; consulta las [notas v1.9](RELEASE_NOTES_V1.9.md) y los documentos actuales para la evolución posterior.
-
-## Documentación ilustrada
-
-- [**Manual de instrucciones v1.9, con carátula oficial (PDF)**](documentacion/GRIT_CLAYMORE_MANUAL_V1_9_OFICIAL.pdf)
-- [**Atlas visual v1.9 (PDF)**](documentacion/GRIT_CLAYMORE_ATLAS_VISUAL_V1_9.pdf)
-- [**Carátula oficial (PNG)**](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png)
-- [**Capturas y recursos gráficos reales**](recursos/juego/)
-- [**Historial de la edición corregida**](documentacion/CHANGELOG.md)
-
-Las capturas jugables de la documentación se han generado a partir de la RAM de pantalla mediante un **intérprete Z80 parcial**, **no** son capturas de Fuse ni de hardware real. Los sprites y tiles se han extraído del código del juego, sin utilizar mockups.
-
-## Código fuente y compilación
-
-El proyecto incluye el ensamblador Z80, mapas, generadores de gráficos y herramientas de pruebas.
+## Compilación e integridad
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-python build_all.py
+python3 -m pip install -r requirements.txt
+python3 build_all.py
 ```
 
-El banco genera `build/GRIT_CLAYMORE_V1.9_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. La [verificación automática de GitHub Actions](.github/workflows/verificar-grit.yml) comprueba que el TAP reconstruido sea **idéntico byte por byte** al publicado y no modifica las Releases. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
+El motor reconstruye `build/GRIT_CLAYMORE_V1.9_48K.tap` y ejecuta pruebas automatizadas. La verificación de GitHub Actions coteja el TAP byte a byte con el aprobado.
 
-El [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) enumera las huellas de los archivos **incluidos en el paquete limpio de fuentes v1.9**, excluido el propio manifiesto. No es el índice de las releases históricas.
+**SHA-256:** `1ddb25648cd64e9fb0b36c7af87c6def9e7620365aa1256920c27c2f6e823127`
 
-La V1.9 dispone de baterías de pruebas automáticas sobre un **intérprete Z80 parcial**, que no modela tiempos reales, contención de memoria, carga de cinta ni sonido. No hay certificación de esta versión en Fuse ni en hardware real. La actualización se realizó mediante cambios selectivos y una release independiente. Consulta [COMO_PUBLICAR.md](COMO_PUBLICAR.md).
+Las pruebas son una aproximación mediante intérprete Z80 parcial; no certifican el comportamiento en hardware físico.
 
-## Licencias y derechos
+## Autoría, licencias y derechos
 
-El **código fuente y las herramientas** se publican con licencia **MIT**, © 2026 Tony C. Ware. Los **gráficos, sprites, carátula, ilustraciones, logotipo y materiales gráficos** tienen los derechos reservados. El archivo compilado se ofrece para descarga y uso personal. La **Licencia MIT (edición asistida por IA)** está disponible en [inglés (LICENSE)](LICENSE) y [castellano (LICENSE_ES.md)](LICENSE_ES.md). Para los recursos gráficos y las condiciones de distribución, consulta [LICENCIA_GRAFICOS.md](LICENCIA_GRAFICOS.md) y [DERECHOS.md](DERECHOS.md).
-
-**© 2026 Tony C. Ware.**
-
-## Carátulas alternativas
-
-Además de la nueva portada expresionista oficial, hay una [galería de tres carátulas alternativas](caratula/alternativas/README.md), incluida la portada clásica de la edición 1.0. Son ilustraciones promocionales; no son capturas del juego y mantienen sus derechos reservados.
+**Idea, dirección creativa y decisiones finales: Tony C. Ware, © 2026.** Código y herramientas bajo [licencia MIT](LICENSE) ([versión castellana](LICENSE_ES.md)). Carátulas, sprites, logotipos e ilustraciones con derechos reservados según [LICENCIA_GRAFICOS.md](LICENCIA_GRAFICOS.md) y [DERECHOS.md](DERECHOS.md).
