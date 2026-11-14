@@ -80,6 +80,10 @@ class VM:
   if op==0xc9:self.pc=self.pop();return
   if op==0xeb:
    d=self.r16(1);self.set16(1,self.hl());self.sethl(d);return
+  if op in (0x1f,0x17):  # V1.8: RRA / RLA (generador xorshift)
+   a=self.r[7];c=self.f&1
+   self.r[7]=((a>>1)|(c<<7)) if op==0x1f else (((a<<1)|c)&255)
+   self.f=(self.f&0x40)|(a&1 if op==0x1f else a>>7);return
   if op in (0x0f,0x07):
    a=self.r[7];self.r[7]=((a>>1)|(a<<7))&255 if op==0xf else ((a<<1)|(a>>7))&255
    self.f=(self.f&0x40)|(a&1 if op==0xf else a>>7);return

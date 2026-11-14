@@ -2,9 +2,9 @@
 
 **Un pequeño arcade de disparos para 48K de Spectrum.**
 
-**ZX Spectrum 48K · Código máquina Z80 · Tony C. Ware · 2026 · V1.6**
+**ZX Spectrum 48K · Código máquina Z80 · Tony C. Ware · 2026 · V1.9**
 
-![Carátula oficial](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png)
+![Carátula oficial expresionista de GRIT CLAYMORE V1.9](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png)
 
 ## El juego
 
@@ -16,9 +16,9 @@ Tres fases de arcade vertical, scroll por bloques, sprites enmascarados, gráfic
 
 ## Descargar y jugar
 
-**[Descargar GRIT CLAYMORE V1.6 — Release oficial](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.6)** · [TAP V1.6 en el repositorio](juego/GRIT_CLAYMORE_V1.6_48K.tap)
+**[Descargar release oficial v1.9](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.9)** · [TAP directo](juego/GRIT_CLAYMORE_V1.9_48K.tap).
 
-La **Release V1.6 ya está publicada**, con el TAP, el [ZIP completo con fuentes](https://github.com/OnRail76/Grit-Claymore/releases/download/v1.6/GRIT_CLAYMORE_V1.6_COMPLETO_CON_FUENTES.zip), la portada oficial, el manual, el atlas y capturas. El código y los archivos del juego siguen accesibles en `main`. Las Releases históricas [V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1) y [V1.0](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conservan sin cambios.
+El paquete completo de la release contiene los fuentes originales necesarios, herramientas, pruebas, recursos reales y documentación; se excluyen binarios intermedios regenerables. Las Releases históricas [V1.6](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.6), [V1.0.1](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0.1) y [V1.0](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.0) se conservan sin cambios.
 
 Carga el archivo en **Fuse** seleccionando la máquina **Spectrum 48K**. El juego utiliza el sonido beeper y teclado.
 
@@ -40,6 +40,27 @@ Grit se mueve y dispara en ocho direcciones, con hasta dos balas en pantalla; el
 ![Pantalla de título ZX Spectrum con controles visibles](recursos/juego/TITULO.png)
 
 La pantalla de título muestra **Q/A/O/P MOVER · SPACE FUEGO · PULSA SPACE** en la última fila negra, sin modificar la ilustración, los créditos ni la rutina de inicio. El resto del juego permanece como en V1.0. La Release V1.0 se conserva en el historial.
+
+## Carátula oficial de la V1.9
+
+La portada **expresionista**, anteriormente la alternativa 03, pasa a ser la **carátula oficial** del juego desde esta edición. La carátula militar clásica de la v1.0 se conserva sin retoques en [alternativas](caratula/alternativas/README.md). La documentación artística se actualiza sin alterar los gráficos del juego.
+
+## Novedades de la V1.9
+
+- **Jefes que apuntan.** La lancha, el camión y el Hind ya no disparan a ciegas desde su centro: si estás debajo, disparan recto desde la columna que tienes encima; si no, en diagonal hacia ti desde su borde más cercano. La lancha dispara el doble de a menudo.
+- **Rabia a mitad de vida.** Al perder la mitad de la vida, el jefe parpadea en rojo, se mueve el doble de rápido, dispara más a menudo y siempre en abanico de tres.
+- **Aviso antes de disparar.** El jefe destella en blanco los cuatro ticks previos a cada disparo: con atención, siempre se puede esquivar.
+- **Tanque.** Más pesado (una casilla cada 4 ticks, la mitad que a pie), casco verde con el cañón en blanco para ver a dónde apunta, y parpadea en rojo al recibir un impacto.
+
+## Novedades de la V1.8
+
+- **Correr ya no sale gratis.** Si Grit avanza sin parar, los soldados reaccionan casi sin aviso, llegan refuerzos el doble de rápido y aparecen emboscadas **por detrás**, cerca de él. Sus balas hacia arriba van al doble de velocidad y corrigen la columna hacia Grit: ya no basta con huir, hay que apartarse o pelear.
+- **Apariciones variadas.** Nuevo generador aleatorio (xorshift de 16 bits): se acabaron las rachas en la misma columna. Además de por arriba, los soldados entran por los lados a media pantalla, siempre en suelo libre y nunca encima de Grit.
+- **El rojo es un tirador.** Solo se queda quieto donde tiene 4 filas de vista despejada (si no, sale al asalto), ve a 12 columnas en lugar de 8 y recarga antes.
+
+## Novedades de la V1.7
+
+- **La melodía del título suena una vez** cada vez que se llega a la pantalla de título, y después silencio hasta pulsar fuego.
 
 ## Novedades de la V1.6
 
@@ -88,12 +109,12 @@ Capturas sacadas del Z80 ensamblado en [recursos/V1.2](recursos/V1.2/). Detalle 
 - **Sonido que no congela el juego**, melodía en el título, secuencia de muerte y fanfarria de jefe.
 - **Joystick Kempston y Sinclair, pausa, ración en columna variable** y cinta 600 bytes más corta.
 
-Detalle y mediciones en [RELEASE_NOTES_V1.1.md](RELEASE_NOTES_V1.1.md) y en el [registro de cambios](documentacion/CHANGELOG.md). El manual y el atlas en PDF siguen describiendo la V1.0.x: no recogen todavía estos cambios.
+Detalle y mediciones en [RELEASE_NOTES_V1.1.md](RELEASE_NOTES_V1.1.md) y en el [registro de cambios](documentacion/CHANGELOG.md). Los PDF anteriores describían la V1.0.x; consulta las [notas v1.9](RELEASE_NOTES_V1.9.md) y los documentos actuales para la evolución posterior.
 
 ## Documentación ilustrada
 
-- [**Manual de instrucciones (PDF)**](documentacion/MANUAL_DE_INSTRUCCIONES.pdf)
-- [**Atlas visual y memoria del desarrollo (PDF)**](documentacion/ATLAS_VISUAL_Y_MEMORIA.pdf)
+- [**Manual de instrucciones v1.9, con carátula oficial (PDF)**](documentacion/GRIT_CLAYMORE_MANUAL_V1_9_OFICIAL.pdf)
+- [**Atlas visual v1.9 (PDF)**](documentacion/GRIT_CLAYMORE_ATLAS_VISUAL_V1_9.pdf)
 - [**Carátula oficial (PNG)**](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png)
 - [**Capturas y recursos gráficos reales**](recursos/juego/)
 - [**Historial de la edición corregida**](documentacion/CHANGELOG.md)
@@ -111,11 +132,11 @@ python -m pip install -r requirements.txt
 python build_all.py
 ```
 
-El banco genera `build/GRIT_CLAYMORE_V1.6_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. La [verificación automática de GitHub Actions](.github/workflows/verificar-grit.yml) comprueba que el TAP reconstruido sea **idéntico byte por byte** al TAP V1.6 versionado y no modifica las Releases. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
+El banco genera `build/GRIT_CLAYMORE_V1.9_48K.tap` (y un TAP de compatibilidad para las pruebas heredadas), y ejecuta el conjunto de regresiones. La [verificación automática de GitHub Actions](.github/workflows/verificar-grit.yml) comprueba que el TAP reconstruido sea **idéntico byte por byte** al publicado y no modifica las Releases. El directorio `build/` se excluye de Git para evitar artefactos obsoletos.
 
-El archivo [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) es un **registro histórico de las huellas del paquete original V1.6**. No representa un inventario actualizado tras la limpieza de los scripts de publicación y la documentación; para comprobar el juego utiliza el SHA-256 del TAP indicado en [las notas V1.6](RELEASE_NOTES_V1.6.md).
+El [MANIFIESTO_SHA256.json](MANIFIESTO_SHA256.json) enumera las huellas de los archivos **incluidos en el paquete limpio de fuentes v1.9**, excluido el propio manifiesto. No es el índice de las releases históricas.
 
-La V1.6 está verificada con 13 baterías de pruebas automáticas sobre un **intérprete Z80 parcial**, que no modela tiempos reales, contención de memoria, carga de cinta ni sonido. La certificación de esta versión en Fuse o hardware real queda fuera de estas pruebas. **No se utilizan scripts de publicación automática ni se sustituye el árbol Git:** la Release V1.6 se publicó manualmente. Para futuras versiones seguimos el [procedimiento seguro](COMO_PUBLICAR.md).
+La V1.9 dispone de baterías de pruebas automáticas sobre un **intérprete Z80 parcial**, que no modela tiempos reales, contención de memoria, carga de cinta ni sonido. No hay certificación de esta versión en Fuse ni en hardware real. La actualización se realizó mediante cambios selectivos y una release independiente. Consulta [COMO_PUBLICAR.md](COMO_PUBLICAR.md).
 
 ## Licencias y derechos
 
@@ -125,4 +146,4 @@ El **código fuente y las herramientas** se publican con licencia **MIT**, © 20
 
 ## Carátulas alternativas
 
-Además de la portada oficial, hay una [galería de tres carátulas alternativas con el logo Tony C. Ware](caratula/alternativas/README.md). Son ilustraciones promocionales; no son capturas del juego y mantienen sus derechos reservados.
+Además de la nueva portada expresionista oficial, hay una [galería de tres carátulas alternativas](caratula/alternativas/README.md), incluida la portada clásica de la edición 1.0. Son ilustraciones promocionales; no son capturas del juego y mantienen sus derechos reservados.

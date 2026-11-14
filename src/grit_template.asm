@@ -3,6 +3,17 @@
 ; Scrolling top-down game. Q/A/O/P incl diagonals, SPACE fires in last direction.
 ; MIT licence, (c) 2026 Tony C. Ware. See README and LIMITATIONS.
 org 0x8000
+; V1.8: variables nuevas en el hueco libre que queda tras las pantallas RLE
+; bajadas a 0x5E00 (acaban en ~0x7F24; tests/test_v18.py lo comprueba).
+rng16: equ 0x7ff0           ; generador xorshift de 16 bits (nunca 0)
+run_meter: equ 0x7ff2       ; cuanto lleva Grit avanzando sin parar
+ss_side: equ 0x7ff3         ; aparicion lateral: 0 izquierda, 1 derecha
+force_attr: equ 0x7ff4      ; V1.9: si no es 0, color de todo lo que se pinta
+boss_half: equ 0x7ff5       ; V1.9: vida del jefe a la que entra en rabia
+boss_rage: equ 0x7ff6       ; V1.9: 1 = jefe en rabia
+rage_flash: equ 0x7ff7      ; V1.9: ticks de parpadeo rojo al entrar en rabia
+boss_mask: equ 0x7ff8       ; V1.9: cadencia de disparo del jefe (2^n-1)
+tank_flash: equ 0x7ff9      ; V1.9: ticks de parpadeo rojo del tanque tocado
 entry:
  di
  xor a
@@ -15,6 +26,19 @@ entry:
  ld de,0x5e00
  ld bc,rle_block_end-rle_block
  ldir
+ ld hl,solid_flags_load    ; V1.8: tabla de colisiones -> 0x5B00
+ ld de,solid_flags
+ ld bc,256
+ ldir
+ ld hl,glyph_colors_load   ; V1.9: colores de los graficos -> 0x5D00
+ ld de,glyph_colors
+ ld bc,256
+ ldir
+ ld hl,0x9b37              ; V1.8: semilla del generador (no puede ser 0)
+ ld (rng16),hl
+ xor a
+ ld (run_meter),a
+ ld (force_attr),a
  ei
  call detect_kempston
  call title_screen
@@ -388,10 +412,12 @@ title_screen:
 ts_mode_done:
  ; El instante de la pulsacion siembra el generador aleatorio.
  ld a,(0x5c78)
- ld b,a
- ld a,(rng)
- xor b
- ld (rng),a
+ ld hl,rng16
+ xor (hl)
+ jp nz,ts_seed_ok
+ inc a                    ; V1.8: el xorshift no puede quedarse en 0
+ts_seed_ok:
+ ld (hl),a
  ret
 ; PackBits-like pixel-art title decompression. 0=end, 1..127 literal,
 ; 128..255 repeat lengths 1..128. Exactly 6912 bytes written to video RAM.
@@ -472,15 +498,15 @@ sp_music:
  jp sp_wait
 
 ; Melodia del titulo: pares (ciclos, retardo); retardo 0 = silencio de
-; "ciclos" fotogramas; ciclos 0 = volver al principio. Se consulta el
-; fuego entre nota y nota.
+; "ciclos" fotogramas; ciclos 0 = fin. Se consulta el fuego entre nota y nota.
+; V1.7: suena UNA vez cada vez que se llega al titulo; al acabar, silencio.
 music_step:
  ld hl,(music_ptr)
  ld a,(hl)
  or a
  jp nz,ms_play
- ld hl,title_tune
- ld a,(hl)
+ ld (music_on),a
+ ret
 ms_play:
  ld b,a
  inc hl
@@ -693,6 +719,9 @@ scene_init:
  ld (tank_mode),a
  ld (invuln),a
  ld (boss_dir),a
+ ld (boss_rage),a          ; V1.9
+ ld (rage_flash),a
+ ld (tank_flash),a
  ld (tank_available),a
  ld (mecha_remaining),a
  ld (boss_hp),a
@@ -739,6 +768,9 @@ boss_init3:
  ld a,32
 boss_init_hp:
  ld (boss_hp),a
+ rrca                      ; V1.9: rabia a mitad de vida (16/24/32 -> 8/12/16)
+ ld (boss_half),a
+ ld a,(boss_hp)
  ld a,14
  ld (boss_x),a
  call load_boss_gfx
@@ -1239,6 +1271,12 @@ scroll_keep_full:
  ret z
  dec a
  ld (camera_top),a
+ ld a,(run_meter)          ; V1.8: avanzar sin parar llena el medidor
+ add a,4
+ jp nc,scroll_meter_ok
+ ld a,255
+scroll_meter_ok:
+ ld (run_meter),a
  ld a,4
  ld (sync_need),a         ; todo paso de scroll dura 4 fotogramas: 12,5 pasos/s
  ld a,(shadow_top)        ; gira el anillo: la fila que sale por abajo
@@ -1807,7 +1845,7 @@ controls_y_below:
  ld a,(tank_mode)
  or a
  jp z,ctrl_speed_foot
- ld a,2
+ ld a,3                    ; V1.9: el tanque, una casilla cada 4 ticks
  ld (move_cool),a
  jp controls_check_pickup
 ctrl_speed_foot:
@@ -1947,11 +1985,25 @@ pr_ok:
  ld a,e
  ld (ration_x),a
  ret
+; V1.8: xorshift de 16 bits (periodo 65535). El de antes (sumar 37 y rotar)
+; repetia la misma columna varias veces seguidas. Devuelve A; usa HL.
 rand:
- ld a,(rng)
- add a,37
- rlca
- ld (rng),a
+ ld hl,(rng16)
+ ld a,h
+ rra
+ ld a,l
+ rra
+ xor h
+ ld h,a
+ ld a,l
+ rra
+ ld a,h
+ rra
+ xor l
+ ld l,a
+ xor h
+ ld h,a
+ ld (rng16),hl
  ret
 
 next_sector:
@@ -2261,6 +2313,12 @@ pb_remove:
 ; IX+8 role (0 fixed, 1 patrol, 2 assault); IX+9 reload;
 ; IX+10 reaction warning; IX+11 patrol anchor.
 update_soldiers:
+ ld a,(run_meter)          ; V1.8: y se vacia solo, un punto por tick
+ or a
+ jp z,us_meter_done
+ dec a
+ ld (run_meter),a
+us_meter_done:
  call update_mechas
  call mecha_wave_check
  call ration_mid_check
@@ -2409,8 +2467,16 @@ us_check_dx:
 us_dx_positive:
  sub c
 us_dx_ready:
- cp 8
- jp nc,us_not_visible
+ ld c,a
+ ld a,(ix+8)               ; V1.8: el rojo (fijo) es tirador: ve a 12
+ or a                      ; columnas; los demas a 8
+ ld a,8
+ jp nz,us_range_ok
+ ld a,12
+us_range_ok:
+ cp c
+ jp c,us_not_visible
+ jp z,us_not_visible
  ld a,(ix+9)
  or a
  jp nz,us_not_visible
@@ -2420,6 +2486,10 @@ us_dx_ready:
  ld a,(ix+10)
  or a
  jp nz,us_countdown
+ ld a,(run_meter)         ; V1.8: a quien llega corriendo le disparan
+ cp 40                    ; casi sin aviso
+ ld a,2
+ jp nc,us_set_warn
  ld a,(phase)             ; V1.3: reaccion mas rapida en fases 2 y 3
  cp 1
  ld a,8
@@ -2456,9 +2526,18 @@ us_cap_ready:
  ld a,(shoot_up)
  or a
  jp z,us_aim_down
- ; hacia arriba: de espaldas a la camara, bala recta desde encima del soldado
+ ; hacia arriba: de espaldas a la camara, bala desde encima del soldado.
+ ; V1.8: recta si Grit esta en su columna; si no (4), la bala corrige su
+ ; columna hacia Grit una vez cada dos filas: a quien huye le alcanza.
  ld (ix+6),0
+ ld a,(player_x)
+ ld c,a
+ ld a,(ix+1)
+ cp c
  ld a,3
+ jp z,us_up_dir
+ inc a
+us_up_dir:
  ld (ix+7),a
  ld a,(ix+1)
  ld (ix+4),a
@@ -2499,6 +2578,13 @@ us_shot_armed:
 us_set_easy_cool:
  ld a,28
 us_set_cool:
+ ld c,a
+ ld a,(ix+8)               ; V1.8: el tirador recarga 10 ticks antes
+ or a
+ ld a,c
+ jp nz,us_cool_store
+ sub 10
+us_cool_store:
  ld (ix+9),a
  jp us_next
 us_not_visible:
@@ -2515,6 +2601,9 @@ us_next:
  ret z
  ld a,(frame)
  ld b,a
+ ld a,(run_meter)          ; V1.8: corriendo, refuerzos el doble de rapido
+ cp 40
+ jp nc,us_spawn_fast
  ld a,(phase)
  cp 2
  jp z,us_spawn_fast
@@ -2532,12 +2621,12 @@ move_hostile_bullet:
  ld a,(ix+3)
  or a
  ret z
+ ld a,(ix+7)              ; V1.8: la bala hacia arriba (Grit ya paso de
+ cp 3                     ; largo) va a una casilla por tick, el doble que
+ jp nc,mb_up              ; Grit: huir ya no basta, hay que apartarse
  ld a,(frame)
  and 1
  ret nz                  ; one tile per two frames: visibly dodgeable
- ld a,(ix+7)
- cp 3
- jp z,mb_up
  ld a,(sector)
  cp 4
  jp z,mb_advance_y
@@ -2572,6 +2661,19 @@ mb_remove:
  ld (ix+3),a
  ret
 mb_up:
+ jp z,mb_up_y              ; 3: recta
+ ld a,(frame)              ; 4: una columna hacia Grit cada dos filas
+ and 1
+ jp nz,mb_up_y
+ ld a,(player_x)
+ cp (ix+4)
+ jp z,mb_up_y
+ jp c,mb_up_left
+ inc (ix+4)
+ jp mb_up_y
+mb_up_left:
+ dec (ix+4)
+mb_up_y:
  ld a,(ix+5)
  dec a
  ld (ix+5),a
@@ -2601,16 +2703,104 @@ ss_find:
  djnz ss_find
  ret
 ss_found:
- ld a,4                  ; V1.3: hasta cuatro columnas antes de rendirse
+ ; V1.8: tres entradas. Arriba (como siempre), por un lado a media pantalla
+ ; o, si Grit lleva un rato avanzando sin parar, emboscada por un lado a
+ ; su altura. Despues el rol; el rojo (fijo) solo se queda donde ve campo.
+ ld a,(run_meter)
+ cp 40
+ jp nc,ss_ambush
+ call rand
+ and 3
+ jp nz,ss_top               ; 3 de cada 4: arriba
+ call rand
+ and 7
+ add a,5                    ; filas 5..12
+ jp ss_side_row
+ss_ambush:
+ ; Emboscada por detras: 3..6 filas por debajo de Grit, cerca de el (busca
+ ; suelo libre desde 4 columnas a su lado hacia fuera). Dispara hacia arriba.
+ call rand
+ and 3
+ add a,3
+ ld c,a
+ ld a,(player_y)
+ add a,c
+ cp 20
+ jp nc,ss_top
+ ld (ix+2),a
+ call rand
+ and 1
+ ld (ss_side),a
+ jp ss_amb_scan
+ss_side_row:
+ ld (ix+2),a
+ call rand
+ and 1
+ ld (ss_side),a
+ ld b,7                     ; busca suelo libre desde el borde hacia dentro
+ ld e,1
+ ld c,1
+ jp z,ss_scan_go
+ ld e,21
+ ld c,255
+ jp ss_scan_go
+; Emboscada: desde 4 columnas al lado de Grit hacia fuera.
+ss_amb_scan:
+ ld b,6
+ ld a,(ss_side)
+ or a
+ ld a,(player_x)
+ ld c,1
+ jp nz,ss_amb_right
+ ld c,255
+ sub 4
+ jp c,ss_top
+ jp ss_amb_go
+ss_amb_right:
+ add a,4
+ss_amb_go:
+ ld e,a
+ss_scan_go:
+ ld d,(ix+2)
+ss_scan:
+ ld a,e                     ; fuera del campo (0 o 22..): se rinde
+ or a
+ jp z,ss_top
+ cp 22
+ jp nc,ss_top
+ push de
+ push bc
+ call quad_free
+ pop bc
+ pop de
+ jp z,ss_side_found
+ ld a,e
+ add a,c
+ ld e,a
+ djnz ss_scan
+ jp ss_top
+ss_side_found:
+ push de                    ; nunca encima de Grit
+ call actor_overlap
+ pop de
+ or a
+ jp nz,ss_top
+ ld (ix+1),e
+ ld a,(ss_side)             ; mira hacia dentro
+ or a
+ ld a,3
+ jp z,ss_face_in
+ ld a,2
+ss_face_in:
+ ld (ix+6),a
+ jp ss_place_row
+ss_top:
+ ld a,4
  ld (ss_tries),a
 ss_try:
- ld a,(rng)
- add a,37
- rlca
- ld (rng),a
+ call rand
  and 15                 ; keep both 8px columns inside the 24-column playfield
  add a,4                ; spawn at x=4..19
-ss_col_ok:
  ld (ix+1),a
  ld e,a
  ld a,1
@@ -2626,6 +2816,7 @@ ss_col_ok:
 ss_place:
  ld a,4
  ld (ix+2),a
+ss_place_row:
  ld a,1
  ld (ix+0),a
  xor a
@@ -2634,21 +2825,33 @@ ss_place:
  ld (ix+10),a
  ld a,(ix+1)
  ld (ix+11),a
- ld a,(rng)               ; V1.3: rol independiente de la columna elegida
- rrca
- rrca
- rrca
- ld b,a
- ld a,(frame)
- xor b
+ call rand
  and 3
- cp 0
  jp z,ss_stationary
  cp 1
  jp z,ss_patrol
  ld a,2
  jp ss_role_store
 ss_stationary:
+ ; El tirador necesita ver: las 4 filas bajo el no pueden ser muro.
+ ld d,(ix+2)
+ inc d
+ inc d
+ ld e,(ix+1)
+ ld b,4
+ss_view:
+ push bc
+ push de
+ call tile_solid
+ pop de
+ pop bc
+ or a
+ ld a,2                     ; tapado: mejor que vaya al asalto
+ jp nz,ss_role_store
+ inc d
+ djnz ss_view
+ ld a,1                     ; quieto y mirando hacia abajo
+ ld (ix+6),a
  xor a
  jp ss_role_store
 ss_patrol:
@@ -2846,18 +3049,46 @@ update_special:
  ret nz
  jp update_hind
 update_hind:
- ld a,(frame)
+ ; V1.9: rabia a mitad de vida: parpadea en rojo, va el doble de rapido,
+ ; dispara mas a menudo y siempre en abanico.
+ ld a,(rage_flash)
+ or a
+ jp z,uh_no_flash
+ dec a
+ ld (rage_flash),a
+uh_no_flash:
+ ld a,(boss_rage)
+ or a
+ jp nz,uh_rage_ok
+ ld a,(boss_half)
  ld b,a
+ ld a,(boss_hp)
+ cp b
+ jp z,uh_enrage
+ jp nc,uh_rage_ok
+uh_enrage:
+ ld a,1
+ ld (boss_rage),a
+ ld a,16
+ ld (rage_flash),a
+uh_rage_ok:
+ ; cadencias: moverse cada 4 ticks (fase 3: cada 2); en rabia, la mitad
  ld a,(phase)
  cp 3
- jp z,hind_move_fast
- ld a,b
- and 3
- jp nz,hind_shoot
- jp hind_move
-hind_move_fast:
- ld a,b
- and 1
+ ld c,3
+ jp nz,uh_mmask
+ ld c,1
+uh_mmask:
+ ld a,(boss_rage)
+ or a
+ jp z,uh_mmask_ok
+ ld a,c                    ; C/2 (srl no esta en el ensamblador)
+ rrca
+ and 0x7f
+ ld c,a
+uh_mmask_ok:
+ ld a,(frame)
+ and c
  jp nz,hind_shoot
 hind_move:
  ld a,(boss_dir)
@@ -2880,23 +3111,27 @@ hind_go_left:
  xor a
  ld (boss_dir),a
 hind_shoot:
+ ; cadencia de disparo: fases 1 y 2 cada 16 ticks (antes 32 y 16), 3 cada 8;
+ ; en rabia la mitad (la fase 3 sigue en 8: ya dispara en abanico).
  ld a,(phase)
- cp 1
- jp z,hind_slow_fire
- cp 2
- jp z,hind_medium_fire
+ ld c,15
+ cp 3
+ jp nz,hs_mask
+ ld c,7
+ jp hs_mask_set
+hs_mask:
+ ld a,(boss_rage)
+ or a
+ jp z,hs_mask_set
+ ld a,c                    ; C/2 (srl no esta en el ensamblador)
+ rrca
+ and 0x7f
+ ld c,a
+hs_mask_set:
+ ld a,c
+ ld (boss_mask),a
  ld a,(frame)
- and 7
- ret nz
- jp hind_fire_now
-hind_medium_fire:
- ld a,(frame)
- and 15
- ret nz
- jp hind_fire_now
-hind_slow_fire:
- ld a,(frame)
- and 31
+ and c
  ret nz
 hind_fire_now:
  ld a,(boss_x)
@@ -2904,18 +3139,60 @@ hind_fire_now:
  ld (shot_origin_x),a
  ld a,7
  ld (shot_origin_y),a
+ ld a,(boss_rage)
+ or a
+ jp nz,hind_fan
+ ld a,(phase)
+ cp 3
+ jp z,hind_fan
+ ; V1.9: disparo apuntado. Si Grit esta bajo el jefe, recto desde la
+ ; columna que tiene encima; si no, en diagonal hacia el desde el borde
+ ; mas cercano (1 abajo-izquierda, 2 abajo-derecha).
+ ld a,(boss_x)
+ ld c,a
+ ld a,(player_x)
+ cp c
+ jp c,hind_aim_left
+ ld a,c
+ add a,3
+ ld c,a
+ ld a,(player_x)
+ cp c
+ jp z,hind_aim_down
+ jp c,hind_aim_down
+ ld a,c                    ; a la derecha del jefe
+ ld (shot_origin_x),a
+ ld a,2
+ jp hind_aim
+hind_aim_left:
+ ld a,c
+ ld (shot_origin_x),a
+ ld a,1
+ jp hind_aim
+hind_aim_down:
+ ld a,(player_x)
+ ld (shot_origin_x),a
  xor a
+hind_aim:
  ld (shot_variant),a
+ push af
  call emit_special_shot
+ pop af
+ or a
+ ret z                     ; ya era recto
  ld a,(phase)
  cp 1
  ret z
+ xor a                     ; fase 2: ademas uno recto
+ ld (shot_variant),a
+ jp emit_special_shot
+hind_fan:
+ xor a
+ ld (shot_variant),a
+ call emit_special_shot
  ld a,1
  ld (shot_variant),a
  call emit_special_shot
- ld a,(phase)
- cp 3
- ret nz
  ld a,2
  ld (shot_variant),a
  jp emit_special_shot
@@ -3248,6 +3525,8 @@ damage_player:
  ld a,(tank_mode)
  or a
  jp z,hurt_foot
+ ld a,12                   ; V1.9: el tanque tocado parpadea en rojo
+ ld (tank_flash),a
  ld a,(armor)
  dec a
  ld (armor),a
@@ -3696,9 +3975,30 @@ draw_special_next:
 tank_draw_idle:
  xor a
 tank_draw_body:
+ ; V1.9: casco verde militar y canon blanco; tocado, parpadea en rojo.
+ push af
+ ld a,(tank_flash)
+ or a
+ jp z,tdb_green
+ dec a
+ ld (tank_flash),a
+ and 2
+ jp z,tdb_green
+ ld a,0x42
+ jp tdb_set
+tdb_green:
+ ld a,0x44
+tdb_set:
+ ld (force_attr),a
+ pop af
  add a,128
  call paint_quad
- ; Four cardinal gun directions painted as masked overlays on animated hull.
+ ld a,(force_attr)
+ cp 0x42
+ jp z,tdb_turret
+ ld a,0x47
+ ld (force_attr),a
+tdb_turret: ; Four cardinal gun directions painted as masked overlays on animated hull.
  ld a,(face)
  add a,28
  ld (turret_glyph),a
@@ -3725,7 +4025,10 @@ tank_turret_right:
  inc e
 tank_turret_draw:
  ld a,(turret_glyph)
- jp paint_tile
+ call paint_tile
+ xor a
+ ld (force_attr),a
+ ret
 erase_one_bullet:
  ld a,(hl)
  or a
@@ -3976,6 +4279,38 @@ restore_quad:
  call restore_tile
  ret
 paint_hind:
+ call boss_tint            ; V1.9: aviso de disparo / rabia
+ call ph_body
+ xor a
+ ld (force_attr),a
+ ret
+; Aviso: los 4 ticks antes de disparar el jefe destella en blanco; al entrar
+; en rabia parpadea en rojo.
+boss_tint:
+ ld a,(rage_flash)
+ or a
+ jp z,bt_warn
+ ld a,(frame)
+ and 2
+ ret z
+ ld a,0x42
+ ld (force_attr),a
+ ret
+bt_warn:
+ ld a,(boss_mask)
+ ld b,a
+ ld a,(frame)
+ add a,4
+ and b
+ cp 4
+ ret nc
+ ld a,(frame)
+ and 1
+ ret z
+ ld a,0x47
+ ld (force_attr),a
+ ret
+ph_body:
  ld a,(frame)
  and 4
  jp z,ph_first_frame
@@ -4073,6 +4408,12 @@ paint_tile:
  jp nz,pt_attr_ok
  ld a,0x42
 pt_attr_ok:
+ ld b,a                    ; V1.9: color forzado (tanque, jefe que avisa)
+ ld a,(force_attr)
+ or a
+ jp nz,pt_forced
+ ld a,b
+pt_forced:
  ld (paint_attr),a
  ld l,c
  ld h,0

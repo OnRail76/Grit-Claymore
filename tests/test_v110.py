@@ -162,7 +162,7 @@ def check_death_and_ration():
  assert g(v,'state')==2
  hits=set()
  for seed in range(40):
-  v=boot();st(v,'rng',(seed*7+1)&255);st(v,'sector',2);invoke(v,'scene_init')
+  v=boot();v.m[S['rng16']]=(seed*7+1)&255;v.m[S['rng16']+1]=seed;st(v,'sector',2);invoke(v,'scene_init')  # V1.8: generador de 16 bits
   assert g(v,'ration_available')==1
   x=g(v,'ration_x');hits.add(x);assert 3<=x<=20 and not solid(v,13,x),('racion en solido',x)
  assert len(hits)>3,hits
@@ -196,7 +196,7 @@ def check_ram_independence():
  def run(dirty):
   v=VM()
   if dirty:
-   for a in list(range(0x4000,0x5c00))+list(range(S['rle_block_end'],0x10000)):v.m[a]=0xaa
+   for a in list(range(0x4000,0x5c00))+list(range(S.get('tape_end',S['rle_block_end']),0x10000)):v.m[a]=0xaa
   start(v);rnd=random.Random(5)
   for i in range(150):tick(v,rnd.choice([(),{'Q'},{'O'},{'P'},{'SPACE'},{'Q','SPACE'}]))
   return bytes(v.m[0x4000:0x5b00]),[g(v,n) for n in ('player_x','player_y','camera_top','health','lives')]

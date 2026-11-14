@@ -1,4 +1,47 @@
+## Nota editorial de la release V1.9 — 2026
+
+La portada expresionista pasa a ser oficial. La anterior portada oficial (edición 1.0) se conserva íntegra en la galería de alternativas. La portada nueva se incorpora como primera página del manual actual; el atlas actual se mantiene en su representación visual original. La dirección artística no modifica el TAP ni el motor Z80.
+
+---
+
 # GRIT CLAYMORE · Registro de cambios
+
+## V1.9 — Jefes y tanque (12 de noviembre de 2026)
+
+- **Disparo apuntado** (`hind_fire_now`): con Grit bajo el jefe, recto desde la columna que tiene encima; si no, en diagonal hacia él desde el borde más cercano. Fase 2: además uno recto. Fase 3 sigue en abanico. Cadencia: lancha y camión cada 16 ticks (la lancha antes cada 32), Hind cada 8.
+- **Rabia** a mitad de vida (`boss_half` = 8/12/16): parpadeo rojo 16 ticks, movimiento el doble de rápido, cadencia doble en fases 1 y 2 y siempre abanico de tres.
+- **Aviso**: el jefe destella en blanco los 4 ticks previos a cada disparo (`boss_tint`, color forzado `force_attr` en `paint_tile`).
+- **Tanque**: una casilla cada 4 ticks (antes cada 3; a pie cada 2), casco verde brillante con la celda del cañón en blanco, parpadeo rojo 12 ticks al recibir.
+- Memoria: los colores de los 256 gráficos viajan al final de la cinta y se bajan a 0x5D00; variables nuevas en 0x7FF4..0x7FF9.
+- Medido con un bot quieto en el centro disparando: la lancha le quita 3 golpes (antes 2), el camión 4 (antes 3), el Hind 3 (igual); la duración del combate apenas cambia (9-15 s).
+- `tests/test_v19.py`: puntería, rabia en los tres jefes, aviso, tanque (velocidad, colores, parpadeo) y memoria.
+- **No validado en Fuse ni en hardware real.**
+- TAP V1.9 SHA-256: `1ddb25648cd64e9fb0b36c7af87c6def9e7620365aa1256920c27c2f6e823127`.
+
+---
+
+## V1.8 — Soldados: correr ya no sale gratis (12 de noviembre de 2026)
+
+- **Generador aleatorio nuevo** (xorshift de 16 bits, `rand`): el de antes (sumar 37 y rotar) repetía la misma columna varias veces seguidas.
+- **Tres entradas**: arriba (3 de cada 4), por un lado a media pantalla (filas 5-12, buscando suelo libre desde el borde) y, si Grit lleva un rato avanzando sin parar (`run_meter`), **emboscada por detrás**: de 3 a 6 filas por debajo de él, a partir de 4 columnas a su lado. Nunca encima de Grit.
+- **Corriendo** (`run_meter` ≥ 40): aviso antes de disparar de 2 ticks (antes 8 o 5) y refuerzos cada 8 ticks.
+- **Balas hacia arriba** a una fila por tick (el doble que Grit) y, si Grit no está en su columna, corrigen una columna hacia él cada dos filas.
+- **El rojo (fijo) es tirador**: solo se queda donde tiene 4 filas de vista libres (si no, sale al asalto), ve a 12 columnas (antes 8) y recarga 10 ticks antes.
+- Memoria: la tabla de colisiones viaja al final de la cinta y se baja a 0x5B00 (búfer de impresora); las variables nuevas, en 0x7FF0.
+- `tests/test_v18.py`: memoria, variedad de apariciones (sin rachas, por los lados, emboscadas, suelo libre, nunca encima de Grit), vista del tirador, balas hacia arriba, y correr hasta el jefe de la fase 1 cuesta 4-6 golpes (V1.7: 1-5).
+- **No validado en Fuse ni en hardware real.**
+- TAP V1.8 SHA-256: `7983bc1231d6a881a8bbb8069769a1e9b2887f52fc74046dffd85da0c21d0da1`.
+
+---
+
+## V1.7 — Melodía del título una sola vez (12 de noviembre de 2026)
+
+- **La melodía del título suena una vez** cada vez que se llega a la pantalla de título (al cargar y al volver tras Game Over o Victoria). Al acabar queda en silencio hasta pulsar fuego, en lugar de repetirse sin fin con el beeper. Pulsar fuego durante la melodía la corta como antes.
+- `tests/test_v17.py`: la melodía suena entera, después no hay ni un cambio más en el altavoz, se puede empezar a jugar y al volver al título suena otra vez, igual.
+- **No validado en Fuse ni en hardware real.**
+- TAP V1.7 SHA-256: `be23c5192ce6f50b88f4df71ea9ee64833c2e86755f60242a18cf442a9dbffc0`.
+
+---
 
 ## V1.6 — Grit ya no se queda atrapado (candidata, 11 de noviembre de 2026)
 
