@@ -32,4 +32,4 @@ La ilustración **expresionista del complejo y los mechas** pasa a ser la carát
 
 **SHA-256 TAP:** `1ddb25648cd64e9fb0b36c7af87c6def9e7620365aa1256920c27c2f6e823127`
 
-Las pruebas del Z80 son pruebas sobre un intérprete parcial y no constituyen certificación en hardware físico. Las releases anteriores (v1.6, v1.0.1 y v1.0) permanecen disponibles sin cambios.
+Las pruebas del Z80 son pruebas sobre un intérprete parcial y no constituyen certificación en hardware físico. La **v1.9 es la única release pública vigente**. El historial técnico completo de las versiones anteriores se conserva en [`documentacion/CHANGELOG.md`](documentacion/CHANGELOG.md) y en Git, sin necesidad de mantener nueve notas de publicación obsoletas.
