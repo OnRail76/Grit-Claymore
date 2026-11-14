@@ -69,3 +69,11 @@ Las pruebas son una aproximación mediante intérprete Z80 parcial; no certifica
 ## Autoría, licencias y derechos
 
 **Idea, dirección creativa y decisiones finales: Tony C. Ware, © 2026.** Código y herramientas bajo [licencia MIT](LICENSE) ([versión castellana](LICENSE_ES.md)). Carátulas, sprites, logotipos e ilustraciones con derechos reservados según [LICENCIA_GRAFICOS.md](LICENCIA_GRAFICOS.md) y [DERECHOS.md](DERECHOS.md).
+
+<!-- ANEXO_PROGRAMAS_UTILIZADOS:INICIO -->
+## Programas utilizados — anexo documental
+
+Los **manuales de instrucciones y atlas visuales** incorporan, como **última página**, el anexo común **«Programas utilizados»**, con las aplicaciones, emuladores y servicios citados por el autor. [Consultar el inventario y sus enlaces](documentacion/ANEXO_PROGRAMAS_UTILIZADOS.md).
+
+Esta es una actualización **exclusivamente documental**: no altera los juegos, sus fuentes, ni las etiquetas o versiones publicadas.
+<!-- ANEXO_PROGRAMAS_UTILIZADOS:FIN -->
