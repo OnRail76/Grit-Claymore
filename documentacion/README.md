@@ -1,9 +1,11 @@
-# Documentación vigente — GRIT CLAYMORE v1.9
+# GRIT CLAYMORE — Documentación de la edición definitiva
 
-- [Manual completo, con carátula expresionista oficial al inicio](GRIT_CLAYMORE_MANUAL_V1_9_OFICIAL.pdf): **9 páginas** (1 portada artística + 8 páginas originales).
-- [Atlas visual del proyecto v1.9](GRIT_CLAYMORE_ATLAS_VISUAL_V1_9.pdf): **4 páginas**, conservadas del archivo aportado.
-- [Historial de versiones](CHANGELOG.md).
+La edición de distribución vigente es **v1.9**.
 
-**Origen gráfico:** las escenas y recursos del juego provienen de las herramientas y activos del proyecto; las ilustraciones promocionales son obras separadas de la imagen del motor. Las pruebas técnicas no sustituyen una ejecución completa en Fuse o hardware real.
+- [Manual de instrucciones definitivo](GRIT_CLAYMORE_MANUAL_V1_9_OFICIAL.pdf), con la nueva carátula expresionista como portada.
+- [Atlas visual definitivo](GRIT_CLAYMORE_ATLAS_VISUAL_V1_9.pdf), conservado sin recreaciones.
+- [Historial técnico completo](CHANGELOG.md).
+- [Carátulas oficiales y alternativas](../caratula/alternativas/README.md).
+- [Archivo artístico y editorial histórico](https://github.com/OnRail76/Grit-Claymore/releases/download/v1.9/GRIT_CLAYMORE_ARCHIVO_ARTISTICO_HISTORICO.zip): documentos PDF e ilustraciones de las primeras publicaciones, guardados antes de retirar sus releases.
 
-Los PDFs históricos de publicaciones anteriores permanecen disponibles en sus releases; no se reescribe su historia.
+Los PDF originales de las primeras ediciones se preservan **íntegros** con sus hashes, sin sustituirlos por las ediciones posteriores. Los recursos gráficos y carátulas siguen teniendo sus propios derechos; la licencia MIT del código no los abarca.
