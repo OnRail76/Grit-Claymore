@@ -37,8 +37,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Instalar dependencias
         run: python3 -m pip install -r requirements.txt
-      - name: Compilar y ejecutar regresiones Z80
-        run: python3 build_all.py
+      - name: Compilar v1.14 y ejecutar regresiones Z80 de publicación
+        timeout-minutes: 15
+        run: python3 -u build_all.py --ci
       - name: Verificar identidad exacta del TAP oficial v1.14
         run: |
           set -euo pipefail
