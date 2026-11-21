@@ -35,7 +35,9 @@ for name in ('title','gameover','victory'):
 rle+='bss_base: equ (rle_block+255)&0xff00\n'
 rle+='map_data: equ bss_base\n'
 rle+='dirty_flags: equ bss_base+0x300\n'
-rle+='dirty_pairs: equ bss_base+0x600\n'
-rle+='bss_end: equ bss_base+0x800\n'
+# La cola ocupa 480 bytes a continuacion de la pantalla sombra.
+# Al empezar a usarla, las tablas de la cinta que pasaban por ahi ya se copiaron.
+rle+='dirty_pairs: equ 0xfb00\n'
+rle+='bss_end: equ bss_base+0x600\n'
 (R/'src/grit.asm').write_text(s.replace(';%%GENERATED_ASSETS%%',assets).replace(';%%RLE_ASSETS%%',rle))
 print('Merged 256 graphics and solid map',len(assets),'+ RLE block',len(rle))

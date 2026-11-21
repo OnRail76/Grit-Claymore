@@ -21,8 +21,8 @@ bas=(line(10,b'\xfd \xb0 "32767"')+
      line(30,b'\xf9 \xc0 \xb0 "32768"'))
 code=BIN.read_bytes()
 # V1.1: binario < 0xFFE0; buffers por debajo de la sombra (0xE000);
-# RLE reubicado dentro de 0x5E00..0x7FFF; pila 0xFB00..0xFFFF.
-assert 0x8000+len(code)<0xffe0
+# RLE reubicado dentro de 0x5E00..0x7FFF; cola 0xFB00; pila 0xFD00..0xFFFF.
+assert 0x8000+len(code)<=SYM['dirty_pairs']+512<=0xfd00
 assert SYM['bss_end']<=0xe000,hex(SYM['bss_end'])
 assert 0x5e00+SYM['rle_block_end']-SYM['rle_block']<=0x8000
 header_bas=bytes([0])+b'GRIT V160 '+struct.pack('<HHH',len(bas),10,len(bas))

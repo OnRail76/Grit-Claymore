@@ -18,7 +18,7 @@ entry:
  di
  xor a
  out (0xfe),a
- ld sp,0                 ; pila en lo alto de la RAM (0xFB00..0xFFFF)
+ ld sp,0                 ; pila en lo alto de la RAM (0xFD00..0xFFFF)
  ; V1.1: las tres pantallas RLE viajan al final del bloque de cinta y se
  ; bajan a 0x5E00 (RAM contendida, solo se leen en titulo/final). Su hueco
  ; lo ocupan despues los buffers y la pantalla sombra en RAM rapida.
@@ -816,21 +816,25 @@ scene_no_mechas:
  ld (mecha_waves),a
  ld a,16
  ld (wave_camera),a
- ; V1.4: una racion en cada sector, arena del jefe incluida; en la fase 3
- ; otra de refuerzo a mitad de sector (ration_mid).
- ld a,1
- ld (ration_available),a
+ ; Racion inicial en todos los sectores. Refuerzo adicional en el
+ ; Laboratorio (1 y 3) y en los tres sectores del Complejo.
  ld a,13
  ld (ration_y),a
  call place_ration
  xor a
  ld (ration_mid),a
- ld a,(phase)
- cp 3
- jp nz,scene_ration_done
  ld a,(sector)
  cp 4
  jp z,scene_ration_done
+ ld a,(phase)
+ cp 3
+ jp z,scene_ration_mid
+ cp 2
+ jp nz,scene_ration_done
+ ld a,(sector)
+ and 1
+ jp z,scene_ration_done
+scene_ration_mid:
  ld a,1
  ld (ration_mid),a
 scene_ration_done:
@@ -850,7 +854,7 @@ scene_no_soldier_setup:
 
 screen_clear:
  ; V1.1: pantalla sombra completa (6912 bytes) en 0xE000..0xFAFF, fuera de
- ; la memoria contendida por la ULA. Pila en 0xFB00..0xFFFF.
+ ; la memoria contendida por la ULA. Cola de dibujo en 0xFB00; pila desde 0xFD00.
  xor a
  ld (shadow_top),a
  ld hl,0xe000
@@ -1758,16 +1762,16 @@ controls_movement:
  jp nc,controls_fire
  ld a,(target_y)
  cp 10
- jp nc,controls_y_ok
+ jr nc,controls_y_ok
  ld a,(axis_y)
  cp 1
- jp nz,controls_y_ok
+ jr nz,controls_y_ok
  ld a,(sector)
  cp 4
- jp z,controls_y_ok
+ jr z,controls_y_ok
  ld a,(camera_top)
  or a
- jp z,controls_y_ok
+ jr z,controls_y_ok
  ; Do not allow the phase-3 mechas to scroll offscreen un-killed.
  ld a,(phase)
  cp 3
@@ -1788,13 +1792,15 @@ controls_scroll_now:
  ld a,1
  ld (player_moving),a
  call scroll_scene
+ call check_ration
+ call check_pickup
  jp controls_fire
 controls_y_ok:
  ; V1.1: en la arena del jefe no se sube de la fila 9. El Hind ocupa las
  ; filas 4..6 y dispara desde la 7: ya no hay hueco seguro encima.
  ld a,(sector)
  cp 4
- jp nz,controls_y_free
+ jr nz,controls_y_free
  ld a,(target_y)
  cp 9
  jp c,controls_fire
@@ -1807,7 +1813,7 @@ controls_y_free:
  jp z,controls_fire
  ld a,(phase)
  cp 3
- jp nz,control_next_screen
+ jr nz,control_next_screen
  ld a,(mecha_remaining)
  or a
  jp nz,controls_fire
@@ -1942,9 +1948,6 @@ check_ration:
  ld a,(ration_available)
  or a
  ret z
- ld a,(tank_mode)
- or a
- ret nz
  ld a,(ration_y)
  ld d,a
  ld a,(ration_x)
@@ -1965,26 +1968,47 @@ ration_store:
  call sound_pickup
  ret
 
-; La racion ya no sale siempre en la columna 11: se prueba una columna al
-; azar que sea transitable (8 intentos; si no, la 11 de siempre).
+; Busca una posicion que admite el cuerpo 2x2 de Grit, no solo la lata.
 place_ration:
- ld a,(ration_y)          ; V1.4: fila variable (13 al empezar, 3 a mitad)
+ ld a,(ration_y)
  ld d,a
- ld b,8
-pr_try:
+ call find_supply_tile
+ ret nz
+ ld a,e
+ ld (ration_x),a
+ ld a,d
+ ld (ration_y),a
+ ld a,1
+ ld (ration_available),a
+ xor a
+ ret
+
+; D = fila inicial. Recorre cuatro filas y las 16 columnas centrales.
+; Empieza en una columna aleatoria y devuelve Z solo con un hueco valido.
+find_supply_tile:
+ ld c,4
+fst_row:
  call rand
  and 15
  add a,4
  ld e,a
- call tile_solid
- or a
- jp z,pr_ok
- djnz pr_try
- ld e,11
-pr_ok:
+ ld b,16
+fst_column:
+ call quad_free
+ ret z
+ inc e
  ld a,e
- ld (ration_x),a
+ cp 20
+ jr nz,fst_next
+ ld e,4
+fst_next:
+ djnz fst_column
+ inc d
+ dec c
+ jr nz,fst_row
+ or 1
  ret
+
 ; V1.8: xorshift de 16 bits (periodo 65535). El de antes (sumar 37 y rotar)
 ; repetia la misma columna varias veces seguidas. Devuelve A; usa HL.
 rand:
@@ -2228,6 +2252,7 @@ pmh_damage:
  jp nz,pb_mecha_damaged
 pmh_dead:
  xor a
+ ld (ix+10),a             ; libera el turno de rafaga
  ld (ix+6),a
  ld d,(ix+2)
  ld e,(ix+1)
@@ -2629,28 +2654,28 @@ move_hostile_bullet:
  ret nz                  ; one tile per two frames: visibly dodgeable
  ld a,(sector)
  cp 4
- jp z,mb_advance_y
+ jr z,mb_advance_y
  ld a,(ix+7)
  cp 1
- jp z,mb_left
+ jr z,mb_left
  cp 2
- jp nz,mb_advance_y
+ jr nz,mb_advance_y
  inc (ix+4)
- jp mb_test_x
+ jr mb_test_x
 mb_left:
  dec (ix+4)
 mb_test_x:
  ld a,(ix+4)
  cp 1
- jp c,mb_remove
+ jr c,mb_remove
  cp 23
- jp nc,mb_remove
+ jr nc,mb_remove
 mb_advance_y:
  ld a,(ix+5)
  inc a
  ld (ix+5),a
  cp 22
- jp nc,mb_remove
+ jr nc,mb_remove
  ld d,a
  ld e,(ix+4)
  call shot_blocked       ; V1.1: los muros tambien paran las balas enemigas
@@ -2664,13 +2689,13 @@ mb_up:
  jp z,mb_up_y              ; 3: recta
  ld a,(frame)              ; 4: una columna hacia Grit cada dos filas
  and 1
- jp nz,mb_up_y
+ jr nz,mb_up_y
  ld a,(player_x)
  cp (ix+4)
- jp z,mb_up_y
- jp c,mb_up_left
+ jr z,mb_up_y
+ jr c,mb_up_left
  inc (ix+4)
- jp mb_up_y
+ jr mb_up_y
 mb_up_left:
  dec (ix+4)
 mb_up_y:
@@ -2678,13 +2703,13 @@ mb_up_y:
  dec a
  ld (ix+5),a
  cp 2
- jp c,mb_remove
+ jr c,mb_remove
  ld d,a
  ld e,(ix+4)
  call shot_blocked
  or a
  ret z
- jp mb_remove
+ jr mb_remove
 
 spawn_soldier:
  ld ix,enemies
@@ -2696,7 +2721,7 @@ spawn_soldier:
  ld b,1
 ss_find:
  ld a,(ix+0)
- or a
+ or (ix+3)
  jp z,ss_found
  ld de,12
  add ix,de
@@ -2740,10 +2765,10 @@ ss_side_row:
  ld b,7                     ; busca suelo libre desde el borde hacia dentro
  ld e,1
  ld c,1
- jp z,ss_scan_go
+ jr z,ss_scan_go
  ld e,21
  ld c,255
- jp ss_scan_go
+ jr ss_scan_go
 ; Emboscada: desde 4 columnas al lado de Grit hacia fuera.
 ss_amb_scan:
  ld b,6
@@ -2755,7 +2780,7 @@ ss_amb_scan:
  ld c,255
  sub 4
  jp c,ss_top
- jp ss_amb_go
+ jr ss_amb_go
 ss_amb_right:
  add a,4
 ss_amb_go:
@@ -2770,7 +2795,7 @@ ss_scan:
  jp nc,ss_top
  push de
  push bc
- call quad_free
+ call soldier_entry_free
  pop bc
  pop de
  jp z,ss_side_found
@@ -2780,20 +2805,15 @@ ss_scan:
  djnz ss_scan
  jp ss_top
 ss_side_found:
- push de                    ; nunca encima de Grit
- call actor_overlap
- pop de
- or a
- jp nz,ss_top
  ld (ix+1),e
  ld a,(ss_side)             ; mira hacia dentro
  or a
  ld a,3
- jp z,ss_face_in
+ jr z,ss_face_in
  ld a,2
 ss_face_in:
  ld (ix+6),a
- jp ss_place_row
+ jr ss_place_row
 ss_top:
  ld a,4
  ld (ss_tries),a
@@ -2806,12 +2826,12 @@ ss_try:
  ld a,1
  ld (ix+6),a
  ld d,4
- call quad_free          ; las cuatro celdas del soldado deben ser suelo
+ call soldier_entry_free
  jp z,ss_place
  ld a,(ss_tries)
  dec a
  ld (ss_tries),a
- jp nz,ss_try
+ jr nz,ss_try
  ret
 ss_place:
  ld a,4
@@ -2827,11 +2847,11 @@ ss_place_row:
  ld (ix+11),a
  call rand
  and 3
- jp z,ss_stationary
+ jr z,ss_stationary
  cp 1
- jp z,ss_patrol
+ jr z,ss_patrol
  ld a,2
- jp ss_role_store
+ jr ss_role_store
 ss_stationary:
  ; El tirador necesita ver: las 4 filas bajo el no pueden ser muro.
  ld d,(ix+2)
@@ -2847,17 +2867,46 @@ ss_view:
  pop bc
  or a
  ld a,2                     ; tapado: mejor que vaya al asalto
- jp nz,ss_role_store
+ jr nz,ss_role_store
  inc d
  djnz ss_view
  ld a,1                     ; quieto y mirando hacia abajo
  ld (ix+6),a
  xor a
- jp ss_role_store
+ jr ss_role_store
 ss_patrol:
  ld a,1
 ss_role_store:
  ld (ix+8),a
+ ret
+
+; D,E: entrada 2x2. Exige suelo, distancia a Grit y salida al menos
+; en una direccion cardinal. Conserva DE para el buscador lateral.
+soldier_entry_free:
+ call quad_free
+ ret nz
+ push de
+ call actor_overlap
+ pop de
+ or a
+ ret nz
+ push de
+ inc d
+ call quad_free
+ jr z,sef_done
+ dec d
+ dec d
+ call quad_free
+ jr z,sef_done
+ inc d
+ dec e
+ call quad_free
+ jr z,sef_done
+ inc e
+ inc e
+ call quad_free
+sef_done:
+ pop de
  ret
 
 ; Fase 3: exclusivamente 2 / 3 mechas de seis impactos.
@@ -2871,7 +2920,7 @@ spawn_mecha_group:
  ld a,5
  ld (mecha_spawn_y),a
  ld a,2
- jp mecha_group_count
+ jr mecha_group_count
 mecha_group_three:
  ld a,7
  ld (mecha_spawn_x),a
@@ -2904,10 +2953,10 @@ mecha_group_loop:
  ld c,a
  ld a,(mecha_remaining)
  cp 2
- jp nz,mecha_next_x3
+ jr nz,mecha_next_x3
  ld a,c
  add a,6
- jp mecha_set_x
+ jr mecha_set_x
 mecha_next_x3:
  ld a,c
  add a,4
@@ -2918,9 +2967,9 @@ mecha_set_x:
  ld a,(mecha_remaining)
  cp 2
  ld a,c
- jp nz,mecha_y_three
+ jr nz,mecha_y_three
  add a,6
- jp mecha_y_set
+ jr mecha_y_set
 mecha_y_three:
  add a,4
 mecha_y_set:
@@ -2941,79 +2990,93 @@ um_loop:
  ld a,(ix+0)
  cp 2
  jp nz,um_next
- ; Two different heights, independent left/right sweeps.
+ ; Mantiene posicion desde el aviso hasta que termina la rafaga.
+ ld a,(ix+10)
+ or a
+ jr nz,um_fire
+ ; Barridos laterales a distintas alturas.
  ld a,(frame)
  and 3
- jp nz,um_fire
+ jr nz,um_fire
  ld a,(ix+8)
  or a
- jp nz,um_go_left
+ jr nz,um_go_left
  ld a,(ix+1)
  ld c,a
  ld a,(ix+7)
  add a,3
  cp c
- jp c,um_reverse_left
- jp z,um_reverse_left
+ jr c,um_reverse_left
+ jr z,um_reverse_left
  ld a,c
  cp 17
- jp nc,um_reverse_left
+ jr nc,um_reverse_left
  ld d,(ix+2)
  ld e,(ix+1)
  call restore_column      ; libera la columna que abandona
  inc (ix+1)
- jp um_fire
+ jr um_fire
 um_reverse_left:
  ld (ix+8),1
- jp um_fire
+ jr um_fire
 um_go_left:
  ld a,(ix+1)
  ld c,a
  ld a,(ix+7)
  sub 3
  cp c
- jp nc,um_reverse_right
+ jr nc,um_reverse_right
  ld a,c
  cp 6
- jp c,um_reverse_right
- jp z,um_reverse_right
+ jr c,um_reverse_right
+ jr z,um_reverse_right
  ld d,(ix+2)
  ld e,(ix+1)
  inc e
  inc e
  call restore_column
  dec (ix+1)
- jp um_fire
+ jr um_fire
 um_reverse_right:
  ld (ix+8),0
 um_fire:
  ld a,(ix+9)
  or a
- jp z,um_fire_ready
+ jr z,um_fire_ready
  dec (ix+9)
- jp um_next
+ jr um_next
 um_fire_ready:
  ld a,(ix+10)
  or a
- jp nz,um_fire_burst
+ jr nz,um_fire_burst
+ ; Un mecha carga o dispara a la vez, incluso si sus relojes coinciden.
+ ld a,(enemies+10)
+ ld c,a
+ ld a,(enemies+22)
+ or c
+ ld c,a
+ ld a,(enemies+34)
+ or c
+ jr nz,um_next
  ld (ix+10),3
- ; Determine aim ONCE per three-shot burst. No tracking the player
- ; between individual bullets; strafing allows a fair dodge.
+ ; Fija la punteria cuando empieza el aviso.
  ld a,(player_x)
  ld c,a
  ld a,(ix+1)
  cp c
- jp z,um_aim_center
- jp c,um_aim_right
+ jr z,um_aim_center
+ jr c,um_aim_right
  ld a,1
- jp um_set_aim
+ jr um_set_aim
 um_aim_right:
  ld a,2
- jp um_set_aim
+ jr um_set_aim
 um_aim_center:
  xor a
 um_set_aim:
  ld (ix+11),a
+ ld (ix+9),8
+ jr um_next
 um_fire_burst:
  ld a,(ix+1)
  inc a
@@ -3027,12 +3090,12 @@ um_fire_burst:
  dec (ix+10)
  ld a,(ix+10)
  or a
- jp nz,um_fire_short
+ jr nz,um_fire_short
  ; 32+id stagger between complete 3-projectile bursts.
  ld a,(ix+7)
  add a,26
  ld (ix+9),a
- jp um_next
+ jr um_next
 um_fire_short:
  ld (ix+9),5
 um_next:
@@ -3929,7 +3992,8 @@ draw_skip_hostile:
  ld de,12
  add ix,de
  pop bc
- djnz draw_actor_loop
+ dec b
+ jp nz,draw_actor_loop
  ld hl,bullets
  call draw_one_bullet
  ld hl,bullets+5
@@ -4127,7 +4191,16 @@ mecha_cell:
  ld b,0
  ld hl,glyph_colors
  add hl,bc
+ ld a,(ix+10)
+ cp 3
  ld a,(hl)
+ jr nz,mc_attr
+ ld a,(frame)
+ and 2
+ ld a,(hl)
+ jr z,mc_attr
+ ld a,0x47
+mc_attr:
  ld (blit_attr),a
  ld l,c
  ld h,0
@@ -4888,7 +4961,12 @@ mecha_wave_check:
  ld a,3
  ld (mecha_remaining),a
  ld ix,enemies
- ld hl,wave_layout        ; en V: laterales arriba, central tres filas mas abajo
+ ld hl,wave_layout
+ ld a,(mecha_waves)
+ or a
+ jr nz,mw_layout_ready
+ ld hl,wave_layout_final
+mw_layout_ready:
  ld b,3
 mw_loop:
  ld c,(hl)
@@ -4936,7 +5014,8 @@ engine_sound:
  ld c,185
  jp tone
 
-wave_layout: db 6,2,11,5,16,2   ; x,y: recorridos de +-3 sin cruzarse
+wave_layout: db 6,2,11,5,16,2
+wave_layout_final: db 6,6,11,2,16,7
 role_colors: db 0,0x43,0x45      ; fijo (rojo), patrulla (magenta), asalto (cian)
 actor_attr: db 0
 shoot_up: db 0
@@ -4956,18 +5035,16 @@ ration_mid_check:
  ld a,(camera_top)
  cp 13
  ret nc
- xor a
- ld (ration_mid),a
  ld a,3
  ld (ration_y),a
  call place_ration
- ld a,1
- ld (ration_available),a
+ ret nz
+ ld (ration_mid),a
  ret
 ration_mid: db 0
 
-; V1.5: canon de plasma. Dos cajas en la fase 3 (sectores 1 y 3), en una
-; posicion 2x2 transitable al azar en la fila 15. Recogerla da 12 disparos
+; Canon de plasma: una caja en cada sector del Complejo antes del Hind.
+; Recogerla da 12 disparos
 ; que atraviesan muros y soldados y quitan 3 impactos a un mecha (2 al Hind).
 setup_plasma:
  xor a
@@ -4990,26 +5067,14 @@ sp_label:
  inc e
  djnz sp_label
  ld a,(sector)
- cp 2
- ret z
  cp 4
  ret z
- ld b,8
-sp_try:
- push bc
- call rand
- and 15
- add a,4
- ld e,a
- ld (pickup_x),a
  ld d,15
- call quad_free
- pop bc
- jp z,sp_found
- djnz sp_try
- ret
-sp_found:
- ld a,15
+ call find_supply_tile
+ ret nz
+ ld a,e
+ ld (pickup_x),a
+ ld a,d
  ld (pickup_y),a
  ld a,1
  ld (pickup_on),a

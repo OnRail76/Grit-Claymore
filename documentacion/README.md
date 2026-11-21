@@ -1,11 +1,11 @@
-# GRIT CLAYMORE — Documentación de la edición definitiva
+# Documentación definitiva de GRIT CLAYMORE v1.14
 
-La edición de distribución vigente es **v1.9**.
+Solo se mantienen los PDF de la **edición vigente**, con su carátula expresionista sin retoques:
 
-- [Manual de instrucciones definitivo](GRIT_CLAYMORE_MANUAL_V1_9_OFICIAL.pdf), con la nueva carátula expresionista como portada.
-- [Atlas visual definitivo](GRIT_CLAYMORE_ATLAS_VISUAL_V1_9.pdf), conservado sin recreaciones.
-- [Historial técnico completo](CHANGELOG.md).
-- [Carátulas oficiales y alternativas](../caratula/alternativas/README.md).
-- [Archivo artístico y editorial histórico](https://github.com/OnRail76/Grit-Claymore/releases/download/v1.9/GRIT_CLAYMORE_ARCHIVO_ARTISTICO_HISTORICO.zip): documentos PDF e ilustraciones de las primeras publicaciones, guardados antes de retirar sus releases.
+- [Manual oficial v1.14 (11 páginas)](GRIT_CLAYMORE_MANUAL_V1_14_OFICIAL.pdf).
+- [Atlas visual v1.14 (6 páginas)](GRIT_CLAYMORE_ATLAS_VISUAL_V1_14.pdf).
+- [Registro técnico consolidado](CHANGELOG.md) (versiones anteriores documentadas en un único archivo).
+- [Programas utilizados](ANEXO_PROGRAMAS_UTILIZADOS.md), anexo incluido al final de ambos PDF.
+- [Carátulas aprobadas](../caratula/alternativas/README.md): la expresionista sigue siendo la oficial, la militar clásica es alternativa.
 
-Los PDF originales de las primeras ediciones se preservan **íntegros** con sus hashes, sin sustituirlos por las ediciones posteriores. Los recursos gráficos y carátulas siguen teniendo sus propios derechos; la licencia MIT del código no los abarca.
+Los cambios de suministros y combate están documentados en la penúltima página del manual y del atlas; los originales y las capturas ya aprobadas se mantienen como parte del proyecto. No se han añadido mockups.

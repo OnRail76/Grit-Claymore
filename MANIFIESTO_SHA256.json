@@ -1,0 +1,11 @@
+{
+  "proyecto": "GRIT CLAYMORE",
+  "version": "1.14",
+  "fecha": "2026-11-21",
+  "sha256": {
+    "juego/GRIT_CLAYMORE_V1.14_48K.tap": "3088339d7a9f822c072f0377abc9872db931b7daa4a6de8498b252c61b7727f3",
+    "documentacion/GRIT_CLAYMORE_MANUAL_V1_14_OFICIAL.pdf": "f1af4a6adea4c2088325f10f3a3595a66fd00b2b4a7fdbacb11133b9c0f4eb3a",
+    "documentacion/GRIT_CLAYMORE_ATLAS_VISUAL_V1_14.pdf": "69a5168ea1d65d8ec5a76af9d2db2728f8ebe176f3c33185882bb1d2e6b4d20a",
+    "caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png": "d548c2b6e68882b599014518d3d7a679dcd4a8371dde5c62a19ee4fa6df0a428"
+  }
+}
