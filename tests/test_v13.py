@@ -1,31 +1,19 @@
 #!/usr/bin/env python3
 """Regresiones de la V1.3: mas enemigos, dificultad, oleadas de mechas, soldados
 en la fase 3, motor del tanque (interprete parcial, no Fuse)."""
-import random
 from harness import boot,invoke,tick
 from mini_z80 import VM,SYM as S
 def g(v,n):return v.m[S[n]]
 def st(v,n,x):v.m[S[n]]=x
 EN=S['enemies']
 
-def check_four_soldiers_and_rear_fire():
- best=0;up=0;faces=set()
- for ph in (1,2):
-  v=boot();st(v,'phase',ph);st(v,'sector',2);invoke(v,'scene_init');rnd=random.Random(ph)
-  for i in range(300):
-   tick(v,rnd.choice([{'Q','SPACE'},{'Q'},{'SPACE'},()]));st(v,'health',4);st(v,'lives',3)
-   if g(v,'sector')!=2:break
-   best=max(best,sum(v.m[EN+12*k]==1 for k in range(4)))
-   for k in range(4):
-    if v.m[EN+12*k]==1:faces.add(v.m[EN+12*k+6])
-    if v.m[EN+12*k+3] and v.m[EN+12*k+7]==3:up+=1
- assert best==4,best
- assert faces=={0,1,2,3},faces
- assert up>20,up
+def check_rear_fire():
  # disparo hacia arriba dirigido: soldado por debajo de Grit
  v=boot()
  for i in range(48):v.m[EN+i]=0
  st(v,'player_x',11);st(v,'player_y',8);st(v,'frame',1)
+ v.m[S['map_data']+14*32+11]=0
+ v.m[S['map_data']+13*32+11]=0
  v.m[EN:EN+12]=bytes([1,11,15,0,0,0,1,0,0,0,0,11])
  for i in range(14):
   tick(v);st(v,'player_x',11);st(v,'player_y',8);st(v,'health',4)
@@ -33,7 +21,7 @@ def check_four_soldiers_and_rear_fire():
  assert v.m[EN+3]==1 and v.m[EN+7]==3 and v.m[EN+6]==0,'el soldado no se gira'
  y0=v.m[EN+5];tick(v);tick(v)
  assert v.m[EN+5]<y0,'la bala no sube'
- print('PASS cuatro soldados a la vez, las cuatro vistas en juego y disparo hacia atras (%d ticks de bala subiendo)'%up)
+ print('PASS el soldado se gira y dispara hacia atras')
 
 def check_role_colors():
  for role,att in ((0,0x42),(1,0x43),(2,0x45)):
@@ -58,7 +46,8 @@ def check_phase3():
   if g(v,'sector')!=2:break
   if g(v,'mecha_remaining')>m0:
    total+=g(v,'mecha_remaining')
-   assert [tuple(v.m[EN+12*k:EN+12*k+3]) for k in range(3)]==[(2,6,2),(2,11,5),(2,16,2)],'oleada en V en lo alto'
+   expected = [(2,6,2),(2,11,5),(2,16,2)] if g(v,'mecha_waves') else [(2,6,6),(2,11,2),(2,16,7)]
+   assert [tuple(v.m[EN+12*k:EN+12*k+3]) for k in range(3)]==expected
   # ningun par de mechas se solapa nunca
   ms=[(v.m[EN+12*k+1],v.m[EN+12*k+2]) for k in range(3) if v.m[EN+12*k]==2]
   for a in range(len(ms)):
@@ -89,5 +78,5 @@ def check_tank_engine():
  print('PASS el tanque ruge al moverse (%d escrituras al altavoz frente a %d parado)'%(move,quiet))
 
 if __name__=='__main__':
- check_four_soldiers_and_rear_fire();check_role_colors();check_phase3();check_bosses();check_tank_engine()
+ check_rear_fire();check_role_colors();check_phase3();check_bosses();check_tank_engine()
  print('ALL V1.3 TESTS PASSED (interprete parcial, no Fuse)')

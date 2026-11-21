@@ -1,10 +1,15 @@
-## Nota editorial de la release V1.9 — 2026
+# GRIT CLAYMORE · Registro de cambios
 
-La portada expresionista pasa a ser oficial. La anterior portada oficial (edición 1.0) se conserva íntegra en la galería de alternativas. La portada nueva se incorpora como primera página del manual actual; el atlas actual se mantiene en su representación visual original. La dirección artística no modifica el TAP ni el motor Z80.
+## V1.14 — Suministros y combate (21 de noviembre de 2026)
+
+- Soldados: entradas con terreno 2×2 libre, distancia respecto a Grit y salida transitable; se conservan las emboscadas y refuerzos al correr.
+- Mechas: puntería fija durante el aviso, ráfagas de tres por turnos, alternancia de disposiciones en V y escalonadas, y señalización visible de la carga.
+- Raciones: colocación en huecos transitables, recogida dentro del tanque y en scroll. 12 iniciales, dos refuerzos en Laboratorio (sectores 1 y 3), tres en Complejo (sectores 1 a 3).
+- Plasma: una caja por sector del Complejo antes del Hind; 12 disparos cada una.
+- TAP aprobado de la prueba de suministros, convertido sin modificar los bytes a edición definitiva `v1.14`. SHA-256: `3088339d7a9f822c072f0377abc9872db931b7daa4a6de8498b252c61b7727f3`.
+- Verificación de simulador Z80 parcial; las comprobaciones no equivalen a certificación en Fuse o hardware físico.
 
 ---
-
-# GRIT CLAYMORE · Registro de cambios
 
 ## V1.9 — Jefes y tanque (12 de noviembre de 2026)
 

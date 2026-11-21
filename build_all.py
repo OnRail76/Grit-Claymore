@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """One command to regenerate source, machine code, TAP, and Z80 regressions."""
-import subprocess,sys
+import argparse, subprocess, sys
 from pathlib import Path
 R=Path(__file__).resolve().parent
-for step in (
+parser = argparse.ArgumentParser(description="GRIT CLAYMORE v1.14: reconstrucción y regresiones")
+parser.add_argument("--ci", action="store_true", help="Validación rápida de publicación: motor, suministros, enemigos, jefes y TAP")
+args = parser.parse_args()
+all_steps = (
  ['tools/art_v12.py'],
  ['tools/font_v07.py'],
  ['tools/title_v07.py'],
@@ -32,13 +35,29 @@ for step in (
  ['tests/test_v17.py'],
  ['tests/test_v18.py'],
  ['tests/test_v19.py'],
+ ['tests/test_v114.py'],
  ['tools/export_review.py'],
  ['tools/review_v07.py'],
  ['tools/preview_v076.py'],
- ['tools/demo_animation_v074.py']):
+ ['tools/demo_animation_v074.py'])
+
+# El modo habitual conserva TODA la batería histórica, incluidos los ensayos largos.
+# El modo --ci se usa para bloquear publicaciones con pruebas recientes y de suministros,
+# evitando que el test exhaustivo de la v1.1 retenga Actions durante decenas de minutos.
+CI_TESTS = {
+ 'tests/test_v13.py', 'tests/test_v14.py', 'tests/test_v15.py',
+ 'tests/test_v17.py', 'tests/test_v18.py', 'tests/test_v19.py',
+ 'tests/test_v114.py',
+}
+if args.ci:
+ steps = [s for s in all_steps if (s[0] in CI_TESTS or not s[0].startswith(('tests/', 'tools/export_review.py','tools/review_v07.py','tools/preview_v076.py','tools/demo_animation_v074.py')))]
+ print('CI v1.14: compilar + %s pruebas específicas; el modo completo sigue disponible sin --ci' % len(CI_TESTS), flush=True)
+else:
+ steps = all_steps
+for step in steps:
  print('+', ' '.join(step),flush=True)
  subprocess.run([sys.executable,*step],cwd=R,check=True)
 
 from shutil import copyfile
-copyfile(R/'build/GRIT_CLAYMORE_V078_48K.tap',R/'build/GRIT_CLAYMORE_V1.9_48K.tap')
-print('GRIT CLAYMORE V1.9 listo en build/GRIT_CLAYMORE_V1.9_48K.tap')
+copyfile(R/'build/GRIT_CLAYMORE_V078_48K.tap',R/'build/GRIT_CLAYMORE_V1.14_48K.tap')
+print('GRIT CLAYMORE V1.14 listo en build/GRIT_CLAYMORE_V1.14_48K.tap')

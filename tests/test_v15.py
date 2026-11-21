@@ -12,14 +12,14 @@ def check_crates():
  for ph in (1,2,3):
   for sec in (1,2,3,4):
    v=boot();st(v,'phase',ph);st(v,'sector',sec);invoke(v,'scene_init')
-   want=1 if ph==3 and sec in (1,3) else 0
+   want=1 if ph==3 and sec<4 else 0
    assert g(v,'pickup_on')==want,(ph,sec)
    if want:
     x,y=g(v,'pickup_x'),g(v,'pickup_y')
-    assert y==15 and not any(solid(v,y+dy,x+dx) for dy in (0,1) for dx in (0,1)),(sec,x,y)
+    assert 15<=y<=18 and not any(solid(v,y+dy,x+dx) for dy in (0,1) for dx in (0,1)),(sec,x,y)
     invoke(v,'draw_dynamic');invoke(v,'present_frame')
     assert all(scr_attr(v,y+dy,x+dx)==0xc3 for dy in (0,1) for dx in (0,1)),'la caja parpadea (FLASH)'
- print('PASS dos cajas de plasma en la fase 3 (sectores 1 y 3), sobre suelo, con FLASH')
+ print('PASS tres cajas de plasma en la fase 3 (sectores 1, 2 y 3), sobre suelo, con FLASH')
 
 def check_pickup_and_fire():
  v=boot();st(v,'phase',3);st(v,'sector',1);invoke(v,'scene_init')

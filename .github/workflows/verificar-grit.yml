@@ -1,6 +1,5 @@
-# CI de solo lectura. La publicación de Releases se realiza manualmente.
-name: Verificar GRIT CLAYMORE V1.9
-
+# Verificación de solo lectura: la publicación se hace explícitamente tras una PR.
+name: Verificar GRIT CLAYMORE v1.14
 on:
   push:
     branches: [main]
@@ -28,22 +27,22 @@ on:
       - 'requirements.txt'
       - 'juego/**'
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
   compilar-y-verificar:
     runs-on: ubuntu-latest
     steps:
       - name: Descargar fuentes
         uses: actions/checkout@v4
-      - name: Instalar dependencias Python
+      - name: Instalar dependencias
         run: python3 -m pip install -r requirements.txt
-      - name: Compilar TAP y ejecutar regresiones Z80
-        run: python3 build_all.py
-      - name: Verificar identidad exacta con V1.9 publicada
+      - name: Compilar v1.14 y ejecutar regresiones Z80 de publicación
+        timeout-minutes: 15
+        run: python3 -u build_all.py --ci
+      - name: Verificar identidad exacta del TAP oficial v1.14
         run: |
           set -euo pipefail
-          echo "1ddb25648cd64e9fb0b36c7af87c6def9e7620365aa1256920c27c2f6e823127  juego/GRIT_CLAYMORE_V1.9_48K.tap" | sha256sum -c -
-          echo "1ddb25648cd64e9fb0b36c7af87c6def9e7620365aa1256920c27c2f6e823127  build/GRIT_CLAYMORE_V1.9_48K.tap" | sha256sum -c -
+          echo "3088339d7a9f822c072f0377abc9872db931b7daa4a6de8498b252c61b7727f3  juego/GRIT_CLAYMORE_V1.14_48K.tap" | sha256sum -c -
+          echo "3088339d7a9f822c072f0377abc9872db931b7daa4a6de8498b252c61b7727f3  build/GRIT_CLAYMORE_V1.14_48K.tap" | sha256sum -c -
+          cmp juego/GRIT_CLAYMORE_V1.14_48K.tap build/GRIT_CLAYMORE_V1.14_48K.tap

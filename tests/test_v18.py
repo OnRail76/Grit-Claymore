@@ -51,6 +51,8 @@ def check_apariciones():
   for dy in (0,1):
    for dx in (0,1):assert not solid(v,y+dy,x+dx),('soldado en solido',x,y)
   assert not (abs(x-px)<2 and abs(y-py)<2),'encima de Grit'
+  assert any(all(not solid(v,y+dy+ry,x+dx+rx) for ry in (0,1) for rx in (0,1))
+             for dx,dy in ((1,0),(-1,0),(0,1),(0,-1))),('entrada aislada',x,y)
  roles={r:sum(1 for t in s if t[8]==r) for r in (0,1,2)}
  for t in s:
   if t[8]==0:

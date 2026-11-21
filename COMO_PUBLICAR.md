@@ -1,18 +1,10 @@
-# GRIT CLAYMORE — Hito definitivo v1.9
+# Publicación oficial GRIT CLAYMORE v1.14
 
-La rama principal **main** está protegida. La v1.9 es la única edición pública vigente tras el cierre editorial.
+Usar el script incluido en el paquete de publicación: `PUBLICAR_GRIT_V1_14.sh`.
 
-## Política de conservación
+La rama `main` está protegida. Subir primero cambios mediante Pull Request, esperar la verificación automática y fusionar por GitHub. Solo después crear la release v1.14. Una vez confirmados TODOS sus assets y la conservación artística, retirar la release anterior v1.9 y su tag; así queda una única release vigente.
 
-1. Publicar la v1.9 a partir del commit de main verificado por GitHub Actions, con TAP, fuentes, manual, atlas y carátula oficial **expresionista**.
-2. Antes de retirar cualquier release anterior, **descargar y comprobar** todos sus archivos PDF e imágenes, preservando los originales con sus huellas SHA-256 en `GRIT_CLAYMORE_ARCHIVO_ARTISTICO_HISTORICO.zip`.
-3. Adjuntar ese ZIP a la release v1.9 y comprobar que GitHub lo ofrece correctamente.
-4. Solo después retirar las releases `v1.0`, `v1.0.1` y `v1.6` y sus etiquetas. **Nunca eliminar sus ilustraciones, atlas ni instrucciones del archivo artístico.**
-5. Limpiar la rama main mediante una Pull Request de mantenimiento, sin borrados de fuentes ni reescrituras del historial.
+El TAP no se recompila ni se modifica durante la publicación, y debe coincidir con SHA-256:
+`3088339d7a9f822c072f0377abc9872db931b7daa4a6de8498b252c61b7727f3`.
 
-Se conserva el código fuente anterior en el historial Git y el [historial técnico](documentacion/CHANGELOG.md). No ejecutar `git push --force`, `git reset --hard` sobre un clon con cambios propios ni reemplazar indiscriminadamente archivos del repositorio.
-
-El TAP aprobado tiene SHA-256:
-`1ddb25648cd64e9fb0b36c7af87c6def9e7620365aa1256920c27c2f6e823127`
-
-**Portadas:** la expresionista es ahora oficial; la portada militar clásica se conserva como alternativa. Las imágenes y PDF históricos no se redibujan.
+No hacer push forzado ni borrar manuales, atlas o carátulas vigentes. La documentación de nuevas versiones se mantiene en `documentacion/CHANGELOG.md` y una sola `RELEASE_NOTES_V1.14.md`.

@@ -1,79 +1,58 @@
 # GRIT CLAYMORE
 
-**Edición definitiva v1.9 · ZX Spectrum 48K · 2026 · Tony C. Ware**
+**Edición v1.14 · ZX Spectrum 48K · © 2026 Tony C. Ware**
 
 ![Carátula oficial expresionista](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png)
 
-## La misión
+## 2026. El mundo no se salvará por sí mismo.
 
-En 2026, Grit Claymore, operativo de la **EFEC (European Federation Enforcer Corps)** —organización ficticia vinculada al EU INTCEN—, llega a Vietnam para desmantelar el tráfico de drogas y armamento experimental de un ejército renegado y detener a **El Comisario**.
+Grit Claymore, agente de la organización ficticia **EFEC (European Federation Enforcer Corps)** vinculada al EU INTCEN, combate en una región aislada de Vietnam al ejército renegado de **El Comisario**, responsable del tráfico de drogas y armamento experimental.
 
-**El mundo no se salvará por sí mismo.**
+[**Descargar la única release vigente: v1.14**](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.14) · [TAP directo para Spectrum 48K](juego/GRIT_CLAYMORE_V1.14_48K.tap)
 
-## Descargar la edición definitiva
+## Novedades de la v1.14 — Suministros y combate
 
-**[GRIT CLAYMORE v1.9 — Release oficial](https://github.com/OnRail76/Grit-Claymore/releases/tag/v1.9)** · [TAP para ZX Spectrum 48K](juego/GRIT_CLAYMORE_V1.9_48K.tap)
+- **Soldados:** Jungla y Laboratorio mantienen refuerzos y emboscadas al avanzar; los nuevos emplazamientos exigen una salida transitable, evitando enemigos atrapados en el paisaje.
+- **Mechas:** fijan la puntería durante el destello de carga, disparan ráfagas de tres proyectiles por turnos y alternan formaciones en V y escalonadas.
+- **Raciones:** aparecen en espacios realmente transitables de 2×2, pueden recogerse durante el desplazamiento de pantalla o dentro del tanque, y se añaden dos refuerzos en Laboratorio y tres en Complejo.
+- **Cañón de plasma:** hay una caja de munición en cada uno de los tres sectores del Complejo previos al Hind. Cada caja aporta 12 disparos.
+- Se mantiene el diseño aprobado de los tres jefes: lancha, camión e Hind Mi-24; la carátula expresionista continúa siendo la oficial.
 
-La v1.9 es la **única edición de distribución vigente**. Las publicaciones antiguas se retiran después de preservar su material gráfico y documental en el **[archivo artístico y editorial](https://github.com/OnRail76/Grit-Claymore/releases/download/v1.9/GRIT_CLAYMORE_ARCHIVO_ARTISTICO_HISTORICO.zip)**. Los cambios técnicos anteriores siguen documentados en el [historial de desarrollo](documentacion/CHANGELOG.md) y en el historial de Git.
+El título incluye tres fases, barra de salud, tanque en las dos primeras, mechas en el Complejo y enfrentamientos con jefes. Las notas completas están en [RELEASE_NOTES_V1.14.md](RELEASE_NOTES_V1.14.md).
 
 ## Controles
 
-| Tecla | Acción |
+| Entrada | Acción |
 |---|---|
-| **Q / A / O / P** | Arriba / abajo / izquierda / derecha |
-| **ESPACIO** | Disparar / iniciar partida |
+| **Q / A / O / P** | Moverse (combinando direcciones para diagonales) |
+| **ESPACIO** | Disparar y comenzar partida |
 | **H** | Pausar / reanudar |
 | **Sinclair 6 / 7 / 8 / 9 / 0** | Izquierda / derecha / abajo / arriba / disparo |
-| **Kempston** | Empezar con FIRE para jugar con joystick |
+| **Kempston** | Empezar la partida pulsando FIRE en el joystick |
 
-## El arcade
+## Documentación y arte de la edición vigente
 
-Tres fases de disparos con movimiento en ocho direcciones, tres sectores temáticos y scroll por bloques. Grit se enfrenta a soldados, mechas y a los jefes de cada fase: **lancha patrullera, camión blindado y helicóptero Hind**.
+- [Manual oficial v1.14, PDF de 11 páginas](documentacion/GRIT_CLAYMORE_MANUAL_V1_14_OFICIAL.pdf), con la carátula expresionista en portada y anexo de suministros.
+- [Atlas visual v1.14, PDF de 6 páginas](documentacion/GRIT_CLAYMORE_ATLAS_VISUAL_V1_14.pdf), con recursos gráficos reales del proyecto y anexo sobre los cambios.
+- [Carátula expresionista oficial](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png), sin modificaciones.
+- [Tres carátulas alternativas](caratula/alternativas/README.md), incluida la portada militar original.
+- [Historial técnico consolidado](documentacion/CHANGELOG.md) y [programas utilizados](documentacion/ANEXO_PROGRAMAS_UTILIZADOS.md).
 
-El **tanque** se utiliza en las primeras fases, soporta cuatro impactos y dispara proyectiles perforantes. La fase final se juega a pie y permite recoger el **cañón de plasma**.
+La edición vigente **no incluye manuales/atlas anteriores ni múltiples release notes**. El archivo artístico anterior, si se conserva en la release, queda separado de los PDF vigentes.
 
-### Mejoras de la edición definitiva
-
-- **Jefes con puntería**, disparos rectos o diagonales hacia Grit y aviso visual antes de disparar.
-- **Fase de rabia** de los jefes al perder la mitad de su resistencia.
-- **Soldados más reactivos**, emboscadas y apariciones variadas, especialmente al avanzar corriendo.
-- **Tanque con inercia y señalización visual** de dirección y daños.
-- Música del título una sola vez por visita, pausa, joystick Kempston/Sinclair y ajustes acumulados de control y mapas.
-
-Las características completas están descritas en [RELEASE_NOTES_V1.9.md](RELEASE_NOTES_V1.9.md).
-
-## Manual, atlas y carátulas
-
-- [**Manual de instrucciones definitivo**](documentacion/GRIT_CLAYMORE_MANUAL_V1_9_OFICIAL.pdf), con la carátula oficial en la primera página.
-- [**Atlas visual de la edición definitiva**](documentacion/GRIT_CLAYMORE_ATLAS_VISUAL_V1_9.pdf).
-- [**Carátula oficial expresionista**](caratula/GRIT_CLAYMORE_CARATULA_OFICIAL.png).
-- [**Tres carátulas alternativas**](caratula/alternativas/README.md), incluida la antigua portada militar oficial.
-- [**Archivo artístico y editorial histórico**](https://github.com/OnRail76/Grit-Claymore/releases/download/v1.9/GRIT_CLAYMORE_ARCHIVO_ARTISTICO_HISTORICO.zip), que conserva los PDF e ilustraciones originales de las primeras publicaciones.
-- [**Recursos originales y capturas del motor**](recursos/juego/).
-
-Las imágenes extraídas de RAM proceden de pruebas con un intérprete Z80 parcial; no se presentan como capturas certificadas de Fuse o hardware real. Los PDF de las primeras ediciones se archivan como documentos históricos, no se reemplazan con recreaciones.
-
-## Compilación e integridad
+## Código fuente y verificación
 
 ```bash
 python3 -m pip install -r requirements.txt
 python3 build_all.py
 ```
 
-El motor reconstruye `build/GRIT_CLAYMORE_V1.9_48K.tap` y ejecuta pruebas automatizadas. La verificación de GitHub Actions coteja el TAP byte a byte con el aprobado.
+La compilación debe reconstruir exactamente el TAP de `juego/GRIT_CLAYMORE_V1.14_48K.tap`, validado mediante SHA-256 y las pruebas del proyecto.
 
-**SHA-256:** `1ddb25648cd64e9fb0b36c7af87c6def9e7620365aa1256920c27c2f6e823127`
+**SHA-256 v1.14:** `3088339d7a9f822c072f0377abc9872db931b7daa4a6de8498b252c61b7727f3`
 
-Las pruebas son una aproximación mediante intérprete Z80 parcial; no certifican el comportamiento en hardware físico.
+**Importante:** las pruebas utilizan un intérprete Z80 parcial. No sustituyen la validación manual en Fuse ni certifican ejecución sobre un Spectrum físico.
 
-## Autoría, licencias y derechos
+## Licencias y créditos
 
-**Idea, dirección creativa y decisiones finales: Tony C. Ware, © 2026.** Código y herramientas bajo [licencia MIT](LICENSE) ([versión castellana](LICENSE_ES.md)). Carátulas, sprites, logotipos e ilustraciones con derechos reservados según [LICENCIA_GRAFICOS.md](LICENCIA_GRAFICOS.md) y [DERECHOS.md](DERECHOS.md).
-
-<!-- ANEXO_PROGRAMAS_UTILIZADOS:INICIO -->
-## Programas utilizados — anexo documental
-
-Los **manuales de instrucciones y atlas visuales** incorporan, como **última página**, el anexo común **«Programas utilizados»**, con las aplicaciones, emuladores y servicios citados por el autor. [Consultar el inventario y sus enlaces](documentacion/ANEXO_PROGRAMAS_UTILIZADOS.md).
-
-Esta es una actualización **exclusivamente documental**: no altera los juegos, sus fuentes, ni las etiquetas o versiones publicadas.
-<!-- ANEXO_PROGRAMAS_UTILIZADOS:FIN -->
+**Idea, dirección creativa y decisiones finales: Tony C. Ware.** Código y herramientas bajo [licencia MIT](LICENSE) ([castellano](LICENSE_ES.md)). Carátulas, gráficos y sprites con derechos reservados; consultar [LICENCIA_GRAFICOS.md](LICENCIA_GRAFICOS.md) y [DERECHOS.md](DERECHOS.md).

@@ -91,9 +91,40 @@ def check_tanque():
 
 def check_memoria():
  assert S['glyph_colors']==0x5d00 and S['force_attr']==0x7ff4
- assert 0x5e00+S['rle_block_end']-S['rle_block']<=0x7ff0 and S['tape_end']<0xfb00
+ assert 0x5e00+S['rle_block_end']-S['rle_block']<=0x7ff0 and S['dirty_pairs']==0xfb00 and S['tape_end']<=0xfd00
  print('PASS memoria: colores en 0x5D00, variables en 0x7FF0, la cinta acaba antes de la pila')
 
+def check_mecha_burst():
+ v=boot();st(v,'phase',3);st(v,'sector',2);invoke(v,'scene_init')
+ e=S['enemies']
+ mechas=[e+12*i for i in range(3)]
+ for m in mechas:v.m[m+9]=0
+ st(v,'frame',2);st(v,'player_x',19)
+ invoke(v,'update_mechas')
+ assert [v.m[m+10] for m in mechas]==[3,0,0]
+ x,y=v.m[e+1:e+3]
+ invoke(v,'draw_dynamic');invoke(v,'present_frame')
+ assert attr(v,y,x)==0x47 and not shots(v)
+ # The volley holds its position and direction even if Grit crosses over.
+ st(v,'frame',4);st(v,'player_x',3)
+ for _ in range(8):
+  invoke(v,'update_mechas')
+  assert not shots(v) and v.m[e+1]==x
+ invoke(v,'update_mechas')
+ assert shots(v)==[(x+1,y+3,2)]
+ for _ in range(12):invoke(v,'update_mechas')
+ assert shots(v)==[(x+1,y+3,2)]*3
+ assert [v.m[m+10] for m in mechas]==[0,3,0]
+ # Destroy the charging mecha through the real hit routine.
+ m=mechas[1]
+ v.m[m+6]=1
+ st(v,'bullet_x',v.m[m+1]);st(v,'bullet_y',v.m[m+2])
+ st(v,'bullet_power',0);invoke(v,'pb_mecha')
+ assert v.m[m]==v.m[m+10]==0
+ invoke(v,'update_mechas')
+ assert v.m[mechas[2]+10]==3
+ print('PASS mechas: aviso visible, punteria fija, tres tiros y siguiente turno tras destruir al que carga')
+
 if __name__=='__main__':
- check_memoria();check_punteria();check_rabia();check_aviso();check_tanque()
- print('ALL V1.9 TESTS PASSED (interprete parcial, no Fuse)')
+ check_memoria();check_punteria();check_rabia();check_aviso();check_tanque();check_mecha_burst()
+ print('ALL BOSS, TANK AND MECHA TESTS PASSED (interprete parcial, no Fuse)')
