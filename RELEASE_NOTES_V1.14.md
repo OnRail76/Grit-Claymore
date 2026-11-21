@@ -26,7 +26,7 @@ La nueva edición afina la colocación de enemigos y suministros, conserva el de
 
 ### Verificación
 
-El código fuente recompila exactamente el TAP recibido. Se han superado las comprobaciones específicas de soldados, raciones, plasma, jefes y mechas mediante el intérprete Z80 parcial del proyecto. La batería completa queda condicionada a la ejecución satisfactoria de GitHub Actions tras fusionar la Pull Request. **No se afirma certificación sobre hardware físico ni partida completa en Fuse.**
+El código fuente recompila exactamente el TAP recibido. Se han superado las comprobaciones específicas de soldados, raciones, plasma, jefes y mechas mediante el intérprete Z80 parcial del proyecto. GitHub Actions comprobó satisfactoriamente la compilación y las regresiones de la v1.14 tanto en la Pull Request como en `main`, verificando la identidad exacta del TAP. La batería histórica extensa permanece disponible con `python3 build_all.py`; la verificación de publicación usa `python3 build_all.py --ci`. **No se afirma certificación sobre hardware físico ni partida completa en Fuse.**
 
 ### Créditos
 
